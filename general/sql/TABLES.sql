@@ -34,6 +34,7 @@ CREATE  TABLE "license" (
 	"name" Text UNIQUE NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
 	"link" Text,
+	"lic_text" Text,
 	PRIMARY KEY ( "id", "uuid_license" ) );
  ;
 -- -------------------------------------------------------------
