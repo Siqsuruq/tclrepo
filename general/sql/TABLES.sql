@@ -9,7 +9,8 @@ CREATE  TABLE "platform" (
 -- -------------------------------------------------------------
 
 -- CREATE INDEX "idx_platform" ---------------------------------
-CREATE INDEX "idx_platform" ON "platform" USING btree( "id" Asc NULLS Last );
+CREATE INDEX "idx_platform_id" ON "platform" USING btree( "id" Asc NULLS Last );
+CREATE INDEX "idx_platform_uuid" ON "platform" USING btree( "uuid_platform" Asc NULLS Last );
 -- -------------------------------------------------------------
 
 -- CREATE  TABLE "category" -------------------------------------
@@ -24,7 +25,8 @@ CREATE  TABLE "category" (
 -- -------------------------------------------------------------
 
 -- CREATE INDEX "idx_category" ---------------------------------
-CREATE INDEX "idx_category" ON "category" USING btree( "uuid_category" Asc NULLS Last );
+CREATE INDEX "idx_category_id" ON "category" USING btree( "id" Asc NULLS Last );
+CREATE INDEX "idx_category_uuid" ON "category" USING btree( "uuid_category" Asc NULLS Last );
 -- -------------------------------------------------------------
 
 -- CREATE  TABLE "license" --------------------------------------
@@ -40,15 +42,15 @@ CREATE  TABLE "license" (
 -- -------------------------------------------------------------
 
 -- CREATE INDEX "idx_license" ----------------------------------
-CREATE INDEX "idx_license" ON "license" USING btree( "id" Asc NULLS Last );
+CREATE INDEX "idx_license_id" ON "license" USING btree( "id" Asc NULLS Last );
+CREATE INDEX "idx_license_uuid" ON "license" USING btree( "uuid_license" Asc NULLS Last );
 -- -------------------------------------------------------------
 
 -- CREATE  TABLE "package" --------------------------------------
 CREATE  TABLE "package" ( 
 	"id" BIGSERIAL,
-	"uuid_package" UUid DEFAULT gen_random_uuid() NOT NULL,
+	"uuid_package" UUid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
 	"name" Text NOT NULL,
-	"uuid_platform" UUid NOT NULL,
 	"description" Text NOT NULL,
 	"uuid_category" UUid NOT NULL,
 	"uuid_license" UUid NOT NULL,
@@ -59,21 +61,76 @@ CREATE  TABLE "package" (
 -- -------------------------------------------------------------
 
 -- CREATE INDEX "idx_package" ----------------------------------
-CREATE INDEX "idx_package" ON "package" USING btree( "id" Asc NULLS Last );
+CREATE INDEX "idx_package_id" ON "package" USING btree( "id" Asc NULLS Last );
+CREATE INDEX "idx_package_uuid" ON "package" USING btree( "uuid_package" Asc NULLS Last );
 -- -------------------------------------------------------------
+
+
+-- CREATE  TABLE "package_versions" --------------------------------------
+CREATE TABLE "package_versions" (
+	"id" BIGSERIAL,
+	"uuid_version" UUID DEFAULT gen_random_uuid() NOT NULL,
+	"uuid_package" UUID NOT NULL REFERENCES "package"("uuid_package") ON DELETE CASCADE,
+	"uuid_platform" UUid NOT NULL,
+	"version" TEXT NOT NULL UNIQUE,
+	"release_date" TIMESTAMP,
+	"path" TEXT NOT NULL,
+	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
+	PRIMARY KEY ( "id", "uuid_version" ) );
+ ;
+-- -------------------------------------------------------------
+
+-- CREATE INDEX "idx_package_versions" ---------------------------------
+CREATE INDEX "idx_package_versions_id" ON "package_versions" USING btree( "id" ASC NULLS LAST );
+CREATE INDEX "idx_package_versions_uuid" ON "package_versions" USING btree( "uuid_version" ASC NULLS LAST );
+-- -------------------------------------------------------------
+
+
+
+-- CREATE  TABLE "authors" --------------------------------------
+CREATE TABLE "authors" (
+	"id" BIGSERIAL,
+	"uuid_author" UUID DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+	"name" TEXT NOT NULL,
+	"email" TEXT,
+	"public_pem" TEXT NOT NULL,
+	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
+	PRIMARY KEY ( "id" ) );
+ ;
+-- -------------------------------------------------------------
+
+-- CREATE INDEX "idx_authors" ---------------------------------
+CREATE INDEX "idx_authors_id" ON "authors" USING btree( "id" ASC NULLS LAST );
+CREATE INDEX "idx_authors_uuid" ON "authors" USING btree( "uuid_author" ASC NULLS LAST );
+-- -------------------------------------------------------------
+
+
+-- CREATE  TABLE "package_authors" --------------------------------------
+CREATE TABLE "package_authors" (
+	"uuid_package" UUID NOT NULL REFERENCES "package"("uuid_package") ON DELETE CASCADE,
+	"uuid_author" UUID NOT NULL REFERENCES "authors"("uuid_author") ON DELETE CASCADE,
+	PRIMARY KEY ( "uuid_package", "uuid_author" ) );
+ ;
+-- -------------------------------------------------------------
+
+-- CREATE INDEX "idx_package_authors" ---------------------------------
+CREATE INDEX "idx_package_authors_package" ON "package_authors" USING btree( "uuid_package" ASC NULLS LAST );
+CREATE INDEX "idx_package_authors_author" ON "package_authors" USING btree( "uuid_author" ASC NULLS LAST );
+-- -------------------------------------------------------------
+
+
+
 
 -- CREATE  TABLE "package_metadata" -----------------------------
 CREATE  TABLE "package_metadata" ( 
 	"id" BIGSERIAL,
 	"uuid_package_metadata" UUid DEFAULT gen_random_uuid() NOT NULL,
-	"uuid_package" UUid NOT NULL,
-	"identifier" Text NOT NULL,
-	"version" Text NOT NULL,
-	"title" Text NOT NULL,
+	"uuid_package" UUid NOT NULL REFERENCES "package"("uuid_package") ON DELETE CASCADE,
 	"creator" Text NOT NULL,
-	"contributor" Text NOT NULL,
-	"rights" Text NOT NULL,
-	"URL" Text NOT NULL,
+	"contributor" Text,
+	"rights" Text,
+	"URL" Text,
+	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
 	PRIMARY KEY ( "id", "uuid_package_metadata" ) );
  ;
 -- -------------------------------------------------------------
