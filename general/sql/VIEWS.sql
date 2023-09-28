@@ -6,7 +6,7 @@ CREATE OR REPLACE VIEW "public"."v_package" AS  SELECT package.id,
     package.uuid_category,
     category.name AS category,
     license.uuid_license,
-    license.name
+    license.name AS license
    FROM package,
     category,
     license
