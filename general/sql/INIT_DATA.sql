@@ -21,3 +21,5 @@ INSERT INTO "category" ("uuid_category","name") VALUES
 ( 'd433f81c-298e-4514-bc35-efd55e4dda0f','Audio' ),
 ( '17ef93bd-ddee-40fe-a148-923135238348','Video' ),
 ( '8563bb67-63cc-460b-9787-0fb29cb675e3','Miscellaneous' );
+
+INSERT INTO dz_conf (var, val) VALUES ('domain_name', 'https://tclrepo.msysc.org');

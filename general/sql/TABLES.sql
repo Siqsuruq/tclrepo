@@ -72,7 +72,7 @@ CREATE TABLE "package_versions" (
 	"uuid_version" UUID DEFAULT gen_random_uuid() NOT NULL,
 	"uuid_package" UUID NOT NULL REFERENCES "package"("uuid_package") ON DELETE CASCADE,
 	"uuid_platform" UUid NOT NULL,
-	"version" TEXT NOT NULL UNIQUE,
+	"version" TEXT NOT NULL,
 	"release_date" TIMESTAMP,
 	"path" TEXT NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
@@ -136,4 +136,20 @@ CREATE  TABLE "package_metadata" (
 -- -------------------------------------------------------------
 -- CREATE INDEX "idx_package_metadata" ----------------------------------
 CREATE INDEX "idx_package_metadata" ON "package_metadata" USING btree( "id" Asc NULLS Last );
+-- -------------------------------------------------------------
+
+
+
+-- CREATE TABLE "dz_conf" --------------------------------------
+CREATE TABLE "public"."dz_conf" ( 
+	"id" BIGSERIAL,
+	"module" Character Varying( 32 ),
+	"var" Text NOT NULL,
+	"val" Text,
+	PRIMARY KEY ( "id" ) );
+ ;
+-- -------------------------------------------------------------
+
+-- CREATE INDEX "dz_conf_id_idx" -------------------------------
+CREATE INDEX "dz_conf_id_idx" ON "public"."dz_conf" USING btree( "id" Asc NULLS Last );
 -- -------------------------------------------------------------
