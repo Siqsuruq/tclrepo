@@ -88,7 +88,7 @@ CREATE OR REPLACE VIEW "public"."v_download" AS  SELECT v_latest_package_version
     v_latest_package_versions.package_description,
     v_latest_package_versions.package_category,
     v_latest_package_versions.rn,
-    concat('<a href="', dz_conf.val, '/api/v2/download/package/', v_latest_package_versions.uuid_package, '">Download</a>') AS link
+    concat('<a href="', dz_conf.val, '/api/v2/download/package/', v_latest_package_versions.uuid_package, '/', v_latest_package_versions.platform_name, '/', v_latest_package_versions.version, '">Download</a>') AS link
    FROM v_latest_package_versions,
     dz_conf
   WHERE (dz_conf.var = 'domain_name'::text);;
