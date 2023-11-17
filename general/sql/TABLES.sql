@@ -95,6 +95,7 @@ CREATE TABLE "authors" (
 	"email" TEXT,
 	"public_pem" TEXT NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
+	"approved" Boolean DEFAULT 'false' NOT NULL,
 	PRIMARY KEY ( "id" ) );
  ;
 -- -------------------------------------------------------------
