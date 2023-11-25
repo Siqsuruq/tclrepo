@@ -163,6 +163,7 @@ CREATE TABLE "public"."user" (
 	"realname" Text NOT NULL,
 	"email" Text NOT NULL,
 	"uuid_user" UUid DEFAULT gen_random_uuid() NOT NULL,
+	"uuid_author" UUid,
 	PRIMARY KEY ( "id", "uuid_user" ) );
  ;
 -- -------------------------------------------------------------
