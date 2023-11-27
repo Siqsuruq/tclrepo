@@ -155,19 +155,19 @@ CREATE TABLE "public"."dz_conf" (
 CREATE INDEX "dz_conf_id_idx" ON "public"."dz_conf" USING btree( "id" Asc NULLS Last );
 -- -------------------------------------------------------------
 
--- CREATE TABLE "user" -----------------------------------------
-CREATE TABLE "public"."user" ( 
+-- CREATE TABLE "users" -----------------------------------------
+CREATE TABLE "public"."users" ( 
 	"id" BIGSERIAL,
 	"username" Text NOT NULL,
 	"password" Text NOT NULL,
 	"realname" Text NOT NULL,
 	"email" Text NOT NULL,
-	"uuid_user" UUid DEFAULT gen_random_uuid() NOT NULL,
+	"uuid_users" UUid DEFAULT gen_random_uuid() NOT NULL,
 	"uuid_author" UUid,
-	PRIMARY KEY ( "id", "uuid_user" ) );
+	PRIMARY KEY ( "id", "uuid_users" ) );
  ;
 -- -------------------------------------------------------------
 
--- CREATE INDEX "user_idx" -------------------------------------
-CREATE INDEX "user_idx" ON "public"."user" USING btree( "id" Asc NULLS Last );
+-- CREATE INDEX "users_idx" -------------------------------------
+CREATE INDEX "users_idx" ON "public"."users" USING btree( "id" Asc NULLS Last );
 -- -------------------------------------------------------------
