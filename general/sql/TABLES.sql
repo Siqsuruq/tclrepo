@@ -87,8 +87,8 @@ CREATE INDEX "idx_package_versions_uuid" ON "package_versions" USING btree( "uui
 
 
 
--- CREATE  TABLE "authors" --------------------------------------
-CREATE TABLE "authors" (
+-- CREATE  TABLE "author" --------------------------------------
+CREATE TABLE "author" (
 	"id" BIGSERIAL,
 	"uuid_author" UUID DEFAULT gen_random_uuid() NOT NULL UNIQUE,
 	"name" TEXT NOT NULL,
@@ -100,23 +100,23 @@ CREATE TABLE "authors" (
  ;
 -- -------------------------------------------------------------
 
--- CREATE INDEX "idx_authors" ---------------------------------
-CREATE INDEX "idx_authors_id" ON "authors" USING btree( "id" ASC NULLS LAST );
-CREATE INDEX "idx_authors_uuid" ON "authors" USING btree( "uuid_author" ASC NULLS LAST );
+-- CREATE INDEX "idx_author" ---------------------------------
+CREATE INDEX "idx_author_id" ON "author" USING btree( "id" ASC NULLS LAST );
+CREATE INDEX "idx_author_uuid" ON "author" USING btree( "uuid_author" ASC NULLS LAST );
 -- -------------------------------------------------------------
 
 
--- CREATE  TABLE "package_authors" --------------------------------------
-CREATE TABLE "package_authors" (
+-- CREATE  TABLE "package_author" --------------------------------------
+CREATE TABLE "package_author" (
 	"uuid_package" UUID NOT NULL REFERENCES "package"("uuid_package") ON DELETE CASCADE,
-	"uuid_author" UUID NOT NULL REFERENCES "authors"("uuid_author") ON DELETE CASCADE,
+	"uuid_author" UUID NOT NULL REFERENCES "author"("uuid_author") ON DELETE CASCADE,
 	PRIMARY KEY ( "uuid_package", "uuid_author" ) );
  ;
 -- -------------------------------------------------------------
 
--- CREATE INDEX "idx_package_authors" ---------------------------------
-CREATE INDEX "idx_package_authors_package" ON "package_authors" USING btree( "uuid_package" ASC NULLS LAST );
-CREATE INDEX "idx_package_authors_author" ON "package_authors" USING btree( "uuid_author" ASC NULLS LAST );
+-- CREATE INDEX "idx_package_author" ---------------------------------
+CREATE INDEX "idx_package_author_package" ON "package_author" USING btree( "uuid_package" ASC NULLS LAST );
+CREATE INDEX "idx_package_author_author" ON "package_author" USING btree( "uuid_author" ASC NULLS LAST );
 -- -------------------------------------------------------------
 
 
