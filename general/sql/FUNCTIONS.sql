@@ -24,6 +24,6 @@ $$ LANGUAGE plpgsql;
 -- -------------------------------------------------------------
 
 CREATE TRIGGER trigger_encrypt_password
-BEFORE INSERT ON public.user
+BEFORE INSERT ON public.users
 FOR EACH ROW
 EXECUTE FUNCTION encrypt_password();
