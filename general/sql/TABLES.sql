@@ -164,7 +164,9 @@ CREATE TABLE "public"."users" (
 	"email" Text NOT NULL,
 	"uuid_users" UUid DEFAULT gen_random_uuid() NOT NULL,
 	"uuid_author" UUid,
-	PRIMARY KEY ( "id", "uuid_users" ) );
+	PRIMARY KEY ( "id", "uuid_users" ),
+	CONSTRAINT "unique_users_email" UNIQUE( "email" ),
+	CONSTRAINT "unique_users_username" UNIQUE( "username" ) );
  ;
 -- -------------------------------------------------------------
 
