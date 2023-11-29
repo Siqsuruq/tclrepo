@@ -173,3 +173,18 @@ CREATE TABLE "public"."users" (
 -- CREATE INDEX "users_idx" -------------------------------------
 CREATE INDEX "users_idx" ON "public"."users" USING btree( "id" Asc NULLS Last );
 -- -------------------------------------------------------------
+
+
+-- CREATE TABLE "filestorage" ----------------------------------
+CREATE TABLE "public"."filestorage" ( 
+	"id" BIGSERIAL NOT NULL,
+	"uuid_filestorage" UUid DEFAULT gen_random_uuid() NOT NULL,
+	"path" Text NOT NULL,
+	"ext" Text NOT NULL,
+	"uuid_user" UUid NOT NULL,
+	"original_name" Text,
+	"ts" Timestamp With Time Zone DEFAULT now() NOT NULL,
+	PRIMARY KEY ( "id", "uuid_filestorage" ) );
+ ;
+-- -------------------------------------------------------------
+
