@@ -188,3 +188,32 @@ CREATE TABLE "public"."filestorage" (
  ;
 -- -------------------------------------------------------------
 
+-- CREATE TABLE "repository_type" -----------------------------
+CREATE TABLE "public"."repository_type" ( 
+	"id" BIGSERIAL,
+	"uuid_repository_type" UUid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+	"name" Text NOT NULL,
+	"extra" "public"."hstore" DEFAULT ''::hstore NOT NULL,
+	PRIMARY KEY ( "id", "uuid_repository_type" ) );
+ ;
+-- -------------------------------------------------------------
+
+-- CREATE INDEX "idx_package_metadata" -------------------------
+CREATE INDEX "idx_repository_type" ON "public"."repository_type" USING btree( "id" Asc NULLS Last );
+-- -------------------------------------------------------------
+
+-- CREATE TABLE "repository" -----------------------------
+CREATE TABLE "public"."repository" ( 
+	"id" BIGSERIAL,
+	"uuid_repository" UUid DEFAULT gen_random_uuid() NOT NULL,
+    "url" Text NOT NULL,
+    "uuid_repository_type" UUID NOT NULL,
+	"extra" "public"."hstore" DEFAULT ''::hstore NOT NULL,
+	PRIMARY KEY ( "id", "uuid_repository" ),
+	FOREIGN KEY ("uuid_repository_type") REFERENCES "public"."repository_type"("uuid_repository_type")
+	);
+-- -------------------------------------------------------------
+
+-- CREATE INDEX "idx_repository" ------------------------------
+CREATE INDEX "idx_repository" ON "public"."repository" USING btree ("id" ASC NULLS LAST);
+-- -------------------------------------------------------------

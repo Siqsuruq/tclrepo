@@ -23,3 +23,21 @@ INSERT INTO "category" ("uuid_category","name") VALUES
 ( '8563bb67-63cc-460b-9787-0fb29cb675e3','Miscellaneous' );
 
 INSERT INTO dz_conf (var, val) VALUES ('domain_name', 'https://tclrepo.msysc.org');
+
+INSERT INTO "repository_type"(
+    "uuid_repository_type",
+    "name"
+) VALUES 
+    ('2c123327-e0f9-41d6-908d-d2ede221acb6'::uuid, 'Fossil'),
+    ('7ee87d5e-d432-47bb-930b-eb19f00669bb'::uuid, 'Bitbucket'),
+    ('98466483-5792-4fd1-a37e-c9644ab1ecc0'::uuid, 'GitHub'),
+    ('eb5de458-6e94-487b-94e1-32dbf5517818'::uuid, 'GitLab'),
+    ('4cd0490b-ac12-4475-88e6-df19ed60d534'::uuid, 'SVN'),
+    ('8bf1dbd4-0817-4fa3-aad4-cce9b2241fe5'::uuid, 'Perforce Helix Core'),
+    ('0e576e32-c983-45ae-ab2f-811b9d2fdd9a'::uuid, 'Azure Repos'),
+    ('65e05a6d-c7ee-41a2-8697-e56041fe95d3'::uuid, 'SourceForge'),
+    ('5dd4421d-c4c6-4d49-9a5a-beb8b2684d5e'::uuid, 'Mercurial'),
+    ('27923dab-e784-4ab5-8bca-9e0729f8d263'::uuid, 'Apache Subversion'),
+    ('2bf91f99-1a9e-408b-a2f2-dca82ce71a1d'::uuid, 'Team Foundation Version Control'),
+    ('2e7f58f5-80a4-4535-b822-b8b659f575d9'::uuid, 'Concurrent Versions System'),
+    ('79f0cc65-fd2a-49c6-a4a5-9ae3bee5aaf1'::uuid, 'AWS CodeCommit');
