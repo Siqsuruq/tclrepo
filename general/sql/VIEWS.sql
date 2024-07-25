@@ -33,7 +33,7 @@ SELECT
 	pa.description AS package_description,
 	c.name AS package_category
 FROM
-  ((package_versions pv
+  ((pkg_version pv
     JOIN platform p ON (pv.uuid_platform = p.uuid_platform))
     JOIN package pa ON (pv.uuid_package = pa.uuid_package))
     LEFT JOIN category c ON (pa.uuid_category = c.uuid_category);

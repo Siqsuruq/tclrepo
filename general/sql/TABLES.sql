@@ -66,23 +66,23 @@ CREATE INDEX "idx_package_uuid" ON "package" USING btree( "uuid_package" Asc NUL
 -- -------------------------------------------------------------
 
 
--- CREATE  TABLE "package_versions" --------------------------------------
-CREATE TABLE "package_versions" (
+-- CREATE  TABLE "pkg_version" --------------------------------------
+CREATE TABLE "pkg_version" (
 	"id" BIGSERIAL,
-	"uuid_version" UUID DEFAULT gen_random_uuid() NOT NULL,
+	"uuid_pkg_version" UUID DEFAULT gen_random_uuid() NOT NULL,
 	"uuid_package" UUID NOT NULL REFERENCES "package"("uuid_package") ON DELETE CASCADE,
 	"uuid_platform" UUid NOT NULL,
 	"version" TEXT NOT NULL,
 	"release_date" TIMESTAMP,
 	"path" TEXT NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
-	PRIMARY KEY ( "id", "uuid_version" ) );
+	PRIMARY KEY ( "id", "uuid_pkg_version" ) );
  ;
 -- -------------------------------------------------------------
 
--- CREATE INDEX "idx_package_versions" ---------------------------------
-CREATE INDEX "idx_package_versions_id" ON "package_versions" USING btree( "id" ASC NULLS LAST );
-CREATE INDEX "idx_package_versions_uuid" ON "package_versions" USING btree( "uuid_version" ASC NULLS LAST );
+-- CREATE INDEX "idx_pkg_version" ---------------------------------
+CREATE INDEX "idx_pkg_version_id" ON "pkg_version" USING btree( "id" ASC NULLS LAST );
+CREATE INDEX "idx_pkg_version_uuid" ON "pkg_version" USING btree( "uuid_pkg_version" ASC NULLS LAST );
 -- -------------------------------------------------------------
 
 
