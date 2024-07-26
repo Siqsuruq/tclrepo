@@ -21,7 +21,7 @@ CREATE OR REPLACE VIEW "public"."v_package" AS  SELECT package.id,
 CREATE OR REPLACE VIEW "public"."v_package_versions" AS
 SELECT
 	pv.id,
-	pv.uuid_version,
+	pv.uuid_pkg_version,
 	pv.uuid_package,
 	pv.uuid_platform,
 	pv.version,
@@ -41,7 +41,7 @@ FROM
 
 -- CREATE VIEW "iv_package_versions_with_rn" ----------------------
 CREATE OR REPLACE VIEW "public"."iv_package_versions_with_rn" AS  SELECT v_package_versions.id,
-    v_package_versions.uuid_version,
+    v_package_versions.uuid_pkg_version,
     v_package_versions.uuid_package,
     v_package_versions.uuid_platform,
     v_package_versions.version,
@@ -58,7 +58,7 @@ CREATE OR REPLACE VIEW "public"."iv_package_versions_with_rn" AS  SELECT v_packa
 
 -- CREATE VIEW "v_latest_package_versions" -----------------------
 CREATE OR REPLACE VIEW "public"."v_latest_package_versions" AS  SELECT iv_package_versions_with_rn.id,
-    iv_package_versions_with_rn.uuid_version,
+    iv_package_versions_with_rn.uuid_pkg_version,
     iv_package_versions_with_rn.uuid_package,
     iv_package_versions_with_rn.uuid_platform,
     iv_package_versions_with_rn.version,
@@ -76,7 +76,7 @@ CREATE OR REPLACE VIEW "public"."v_latest_package_versions" AS  SELECT iv_packag
 
 -- CREATE VIEW "v_download" ------------------------------------
 CREATE OR REPLACE VIEW "public"."v_download" AS  SELECT v_latest_package_versions.id,
-    v_latest_package_versions.uuid_version,
+    v_latest_package_versions.uuid_pkg_version,
     v_latest_package_versions.uuid_package,
     v_latest_package_versions.uuid_platform,
     v_latest_package_versions.version,
