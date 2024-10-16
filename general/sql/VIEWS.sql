@@ -1,22 +1,5 @@
 BEGIN;
 
--- CREATE VIEW "v_package" -------------------------------------
-CREATE OR REPLACE VIEW "public"."v_package" AS  SELECT package.id,
-    package.uuid_package,
-    package.name AS package,
-    package.description,
-    package.uuid_category,
-    category.name AS category,
-    license.uuid_license,
-    license.name AS license,
-    concat('<a href="', dz_conf.val, '/api/v2/download/package/', package.uuid_package, '">Download</a>') AS link
-   FROM package,
-    category,
-    license,
-    dz_conf
-  WHERE ((package.uuid_category = category.uuid_category) AND (package.uuid_license = license.uuid_license) AND (dz_conf.var = 'domain_name'::text));;
--- -------------------------------------------------------------
-
 -- CREATE VIEW "v_package_versions" ----------------------------
 CREATE OR REPLACE VIEW "public"."v_package_versions" AS
 SELECT

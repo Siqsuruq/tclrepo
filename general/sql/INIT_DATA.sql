@@ -22,7 +22,16 @@ INSERT INTO "category" ("uuid_category","name") VALUES
 ( '17ef93bd-ddee-40fe-a148-923135238348','Video' ),
 ( '8563bb67-63cc-460b-9787-0fb29cb675e3','Miscellaneous' );
 
-INSERT INTO dz_conf (var, val) VALUES ('domain_name', 'https://tclrepo.msysc.org');
+INSERT INTO "dz_conf"("module","var","val") VALUES
+	(NULL, 'domain_name', 'https://tclrepo.msysc.org'),
+	(NULL, 'repo_path', '/opt/ns/client/repo'),
+	(NULL, 'language', 'en'),
+	('date_time', 'date_format', '%d-%m-%Y'),
+	('date_time', 'now_date_time_format', '%d-%m-%Y_%H-%M-%S'),
+	('date_time', 'time_format', '%H:%M:%S'),
+	('date_time', 'time_hm_format', '%H:%M'),
+	('date_time', 'timestamp_format', '%d-%m-%Y %H:%M:%S'),
+	('date_time', 'timezone', 'Atlantic/Cape_Verde');
 
 INSERT INTO "repository_type"(
     "uuid_repository_type",

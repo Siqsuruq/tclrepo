@@ -50,10 +50,9 @@ CREATE INDEX "idx_license_uuid" ON "license" USING btree( "uuid_license" Asc NUL
 CREATE  TABLE "package" ( 
 	"id" BIGSERIAL,
 	"uuid_package" UUid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
-	"name" Text NOT NULL,
+	"name" Text UNIQUE NOT NULL,
 	"description" Text NOT NULL,
 	"uuid_category" UUid NOT NULL,
-	"uuid_license" UUid NOT NULL,
 	"path" Text NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
 	PRIMARY KEY ( "id", "uuid_package" ) );
@@ -72,6 +71,7 @@ CREATE TABLE "pkg_version" (
 	"uuid_pkg_version" UUID DEFAULT gen_random_uuid() NOT NULL,
 	"uuid_package" UUID NOT NULL REFERENCES "package"("uuid_package") ON DELETE CASCADE,
 	"uuid_platform" UUid NOT NULL,
+	"uuid_license" UUid NOT NULL,
 	"version" TEXT NOT NULL,
 	"release_date" TIMESTAMP,
 	"path" TEXT NOT NULL,
@@ -92,7 +92,7 @@ CREATE TABLE "author" (
 	"id" BIGSERIAL,
 	"uuid_author" UUID DEFAULT gen_random_uuid() NOT NULL UNIQUE,
 	"name" TEXT NOT NULL,
-	"email" TEXT,
+	"email" TEXT NOT NULL,
 	"public_pem" TEXT NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
 	"approved" Boolean DEFAULT 'false' NOT NULL,
@@ -164,6 +164,10 @@ CREATE TABLE "public"."users" (
 	"email" Text NOT NULL,
 	"uuid_users" UUid DEFAULT gen_random_uuid() NOT NULL,
 	"uuid_author" UUid,
+	"created_at" Timestamp With Time Zone DEFAULT now() NOT NULL,
+	"updated_at" Timestamp With Time Zone DEFAULT now() NOT NULL,
+	"status" Text DEFAULT 'active'::text NOT NULL,
+	"last_login" Timestamp With Time Zone,
 	PRIMARY KEY ( "id", "uuid_users" ),
 	CONSTRAINT "unique_users_email" UNIQUE( "email" ),
 	CONSTRAINT "unique_users_username" UNIQUE( "username" ) );
@@ -174,6 +178,13 @@ CREATE TABLE "public"."users" (
 CREATE INDEX "users_idx" ON "public"."users" USING btree( "id" Asc NULLS Last );
 -- -------------------------------------------------------------
 
+-- CREATE INDEX "users_email_idx" ------------------------------
+CREATE INDEX "users_email_idx" ON "public"."users" USING btree( "email" Asc NULLS Last );
+-- -------------------------------------------------------------
+
+-- CREATE INDEX "users_username_idx" ---------------------------
+CREATE INDEX "users_username_idx" ON "public"."users" USING btree( "username" Asc NULLS Last );
+-- -------------------------------------------------------------
 
 -- CREATE TABLE "filestorage" ----------------------------------
 CREATE TABLE "public"."filestorage" ( 
@@ -192,7 +203,7 @@ CREATE TABLE "public"."filestorage" (
 CREATE TABLE "public"."repository_type" ( 
 	"id" BIGSERIAL,
 	"uuid_repository_type" UUid DEFAULT gen_random_uuid() NOT NULL UNIQUE,
-	"name" Text NOT NULL,
+	"name" Text UNIQUE NOT NULL,
 	"extra" "public"."hstore" DEFAULT ''::hstore NOT NULL,
 	PRIMARY KEY ( "id", "uuid_repository_type" ) );
  ;
