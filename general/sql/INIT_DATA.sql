@@ -50,3 +50,13 @@ INSERT INTO "repository_type"(
     ('2bf91f99-1a9e-408b-a2f2-dca82ce71a1d'::uuid, 'Team Foundation Version Control'),
     ('2e7f58f5-80a4-4535-b822-b8b659f575d9'::uuid, 'Concurrent Versions System'),
     ('79f0cc65-fd2a-49c6-a4a5-9ae3bee5aaf1'::uuid, 'AWS CodeCommit');
+
+INSERT INTO "license"( "name", "link")  VALUES
+	('Apache-2.0', 'https://opensource.org/license/apache-2-0'),
+	('BSD-2-Clause', 'https://opensource.org/license/bsd-2-clause'),
+	('BSD-3-Clause', 'https://opensource.org/license/bsd-3-clause'),
+	('MIT', 'https://opensource.org/license/mit'),
+	('GPL-2.0', 'https://opensource.org/license/gpl-2-0'),
+	('GPL-3.0-only', 'https://opensource.org/license/gpl-3-0'),
+	('LGPL-2.1', 'https://opensource.org/license/lgpl-2-1'),
+	('LGPL-3.0-only', 'https://opensource.org/license/lgpl-3-0');

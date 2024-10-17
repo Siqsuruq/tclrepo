@@ -12,18 +12,3 @@ AS $function$
     }
 $function$;
 -- -------------------------------------------------------------
-
-CREATE OR REPLACE FUNCTION encrypt_password()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.password = crypt(NEW.password, gen_salt('bf'));
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- -------------------------------------------------------------
-
-CREATE TRIGGER trigger_encrypt_password
-BEFORE INSERT ON public.users
-FOR EACH ROW
-EXECUTE FUNCTION encrypt_password();
