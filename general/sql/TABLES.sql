@@ -53,7 +53,6 @@ CREATE  TABLE "package" (
 	"name" Text UNIQUE NOT NULL,
 	"description" Text NOT NULL,
 	"uuid_category" UUid NOT NULL,
-	"uuid_platform" UUid NOT NULL,
 	"path" Text NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
 	PRIMARY KEY ( "id", "uuid_package" ) );
@@ -73,6 +72,7 @@ CREATE TABLE "pkg_version" (
 	"uuid_package" UUID NOT NULL REFERENCES "package"("uuid_package") ON DELETE CASCADE,
 	"uuid_license" UUid NOT NULL,
 	"version" TEXT NOT NULL,
+	"uuid_platform" UUid NOT NULL,
 	"release_date" TIMESTAMP,
 	"path" TEXT NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
