@@ -53,6 +53,7 @@ CREATE  TABLE "package" (
 	"name" Text UNIQUE NOT NULL,
 	"description" Text NOT NULL,
 	"uuid_category" UUid NOT NULL,
+	"uuid_platform" UUid NOT NULL,
 	"path" Text NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
 	PRIMARY KEY ( "id", "uuid_package" ) );
@@ -70,7 +71,6 @@ CREATE TABLE "pkg_version" (
 	"id" BIGSERIAL,
 	"uuid_pkg_version" UUID DEFAULT gen_random_uuid() NOT NULL,
 	"uuid_package" UUID NOT NULL REFERENCES "package"("uuid_package") ON DELETE CASCADE,
-	"uuid_platform" UUid NOT NULL,
 	"uuid_license" UUid NOT NULL,
 	"version" TEXT NOT NULL,
 	"release_date" TIMESTAMP,
