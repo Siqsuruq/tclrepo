@@ -71,7 +71,7 @@ CREATE OR REPLACE VIEW "public"."v_download" AS  SELECT v_latest_package_version
     v_latest_package_versions.package_description,
     v_latest_package_versions.package_category,
     v_latest_package_versions.rn,
-    concat('<a href="', dz_conf.val, '/api/v2/download/package/', v_latest_package_versions.uuid_pkg_version, '"><i class="bi bi-cloud-arrow-down"></i></a>') AS download,
+    concat('<a href="', dz_conf.val, '/api/v2/download/package/', v_latest_package_versions.uuid_pkg_version, '"><i class="bi bi-cloud-download"></i></a>') AS download,
     concat('<a href="', dz_conf.val, '/api/v2/info/package/', v_latest_package_versions.uuid_pkg_version, '"><i class="bi bi bi-info-square"></i></a>') AS info
    FROM v_latest_package_versions,
     dz_conf
