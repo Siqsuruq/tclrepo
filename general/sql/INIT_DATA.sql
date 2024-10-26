@@ -1,11 +1,18 @@
-INSERT INTO "platform" ("uuid_platform","name") VALUES 
-( 'd1a5ad90-2534-471f-9a7f-b9eae64f0e7e','Tcl' ),
-( '9bb9da21-a628-4cca-8e94-5ab9317b6747','Tcl/Tk' ),
-( '99810a9b-2759-4bb5-a6d0-7b4f04b2668c','Linux32' ),
-( '3c1e96e2-f130-4d5c-b206-63623007ca58','Linux64' ),
-( '13df1bad-20e6-4891-ac94-aad937c80bd1','Win32' ),
-( '9c8237da-68ea-46c2-971f-2c59ce888329','Win64' ),
-( '255506df-6f5f-416b-be9f-9f2315db4eae','Mac' );
+INSERT INTO "platform" ("uuid_platform", "name", "description") VALUES
+( 'd1a5ad90-2534-471f-9a7f-b9eae64f0e7e', 'Tcl', 'Packages that work with the Tcl scripting language, regardless of platform.' ),
+( '9bb9da21-a628-4cca-8e94-5ab9317b6747', 'Tk', 'Requires the Tk toolkit for graphical user interfaces (GUI) alongside Tcl.' ),
+( '99810a9b-2759-4bb5-a6d0-7b4f04b2668c', 'Linux32', 'Packages compatible only with 32-bit Linux operating systems.' ),
+( '3c1e96e2-f130-4d5c-b206-63623007ca58', 'Linux64', 'Packages compatible only with 64-bit Linux operating systems.' ),
+( '13df1bad-20e6-4891-ac94-aad937c80bd1', 'Win32', 'Packages compatible only with 32-bit Windows operating systems.' ),
+( '9c8237da-68ea-46c2-971f-2c59ce888329', 'Win64', 'Packages compatible only with 64-bit Windows operating systems.' ),
+( '255506df-6f5f-416b-be9f-9f2315db4eae', 'Mac', 'Packages compatible only with macOS desktop and laptop systems.' ),
+( '5eadbc58-e23a-4e33-96ce-b1b20aded4a4', 'AIX', 'Packages compatible only with IBM AIX, a UNIX operating system commonly used in enterprise environments.' ),
+( 'c1a632bb-5425-45a8-8254-4dfd0f88e712', 'Solaris', 'Packages compatible only with Solaris, an operating system from Oracle, often used on SPARC systems.' ),
+( 'e57c7ff7-6e48-4b78-9624-65deacb41fd3', 'BSD', 'Packages compatible with BSD-based operating systems such as FreeBSD, OpenBSD, and NetBSD.' ),
+( '5bc52275-33bf-4a9a-a8cb-d6af25deaf63', 'Android', 'Packages that can be used only on Android devices, typically requiring mobile-friendly dependencies.' ),
+( '0e0e72cf-cab6-41db-a982-b72dc101bd83', 'ARM', 'Packages designed only for ARM architecture, commonly used in devices like Raspberry Pi and embedded systems.' ),
+( '4dcee4bd-f48f-4fdd-9f83-711b63b019ef', 'iOS', 'Packages compatible only with Apple iOS mobile devices such as iPhones and iPads.' );
+
 
 INSERT INTO "category" ("uuid_category","name") VALUES 
 ( '1611ab61-626c-4070-8f1a-f63e9af1a0e1','Essentials' ),
@@ -20,7 +27,14 @@ INSERT INTO "category" ("uuid_category","name") VALUES
 ( 'f5fd64c2-cff0-4c8c-81d5-154eb04a6369','Images' ),
 ( 'd433f81c-298e-4514-bc35-efd55e4dda0f','Audio' ),
 ( '17ef93bd-ddee-40fe-a148-923135238348','Video' ),
-( '8563bb67-63cc-460b-9787-0fb29cb675e3','Miscellaneous' );
+( '8563bb67-63cc-460b-9787-0fb29cb675e3','Miscellaneous' ),
+( 'a21e8d07-c467-4e64-a126-929825e166c5', 'Security'),
+( '000c872d-9282-4e98-bc1d-d19a00f28ba3', 'Testing'),
+( 'c768c55c-8e06-446f-98d6-6b0c743db72f', 'Logging'),
+( 'ebdd5475-3cf5-4509-891b-fabd6efa2972', 'Integration'),
+( '75912dbc-5dd0-46e2-85d7-ce89acb01510', 'Performance'),
+( '9b2006dd-76c9-4c2e-9613-e08e45dc258a', 'Business'),
+( '42643c52-74d0-4a7f-9c9b-c0afa1267c7b', 'Standard Libraries');
 
 INSERT INTO "dz_conf"("module","var","val") VALUES
 	(NULL, 'domain_name', 'https://tclrepo.msysc.org'),

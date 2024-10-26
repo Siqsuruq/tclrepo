@@ -3,6 +3,7 @@ CREATE  TABLE "platform" (
 	"id" BIGSERIAL,
 	"uuid_platform" UUid DEFAULT gen_random_uuid() NOT NULL,
 	"name" Text UNIQUE NOT NULL,
+	"description" Text NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
 	PRIMARY KEY ( "id", "uuid_platform" ) );
  ;
