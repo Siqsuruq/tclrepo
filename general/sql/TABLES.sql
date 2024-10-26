@@ -73,7 +73,7 @@ CREATE TABLE "pkg_version" (
 	"uuid_license" UUid NOT NULL,
 	"version" TEXT NOT NULL,
 	"uuid_platform" UUid NOT NULL,
-	"release_date" TIMESTAMP,
+	"uploaded_timestamp" TIMESTAMP DEFAULT NOW(),
 	"path" TEXT NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
 	PRIMARY KEY ( "id", "uuid_pkg_version" ) );
