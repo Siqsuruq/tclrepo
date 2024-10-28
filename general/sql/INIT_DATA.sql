@@ -73,4 +73,6 @@ INSERT INTO "license"( "name", "link")  VALUES
 	('GPL-2.0', 'https://opensource.org/license/gpl-2-0'),
 	('GPL-3.0-only', 'https://opensource.org/license/gpl-3-0'),
 	('LGPL-2.1', 'https://opensource.org/license/lgpl-2-1'),
-	('LGPL-3.0-only', 'https://opensource.org/license/lgpl-3-0');
+	('LGPL-3.0-only', 'https://opensource.org/license/lgpl-3-0'),
+	('MPL-1.1', 'https://opensource.org/license/mpl-1-1'),
+	('MPL-2.0', 'https://opensource.org/license/mpl-2-0');
