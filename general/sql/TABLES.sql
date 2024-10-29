@@ -77,7 +77,8 @@ CREATE TABLE "pkg_version" (
 	"uploaded_timestamp" TIMESTAMP DEFAULT NOW(),
 	"path" TEXT NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
-	PRIMARY KEY ( "id", "uuid_pkg_version" ) );
+	PRIMARY KEY ( "id", "uuid_pkg_version" ),
+	UNIQUE ("uuid_pkg_version")	);
  ;
 -- -------------------------------------------------------------
 
@@ -88,10 +89,10 @@ CREATE INDEX "idx_pkg_version_uuid" ON "pkg_version" USING btree( "uuid_pkg_vers
 
 
 
--- CREATE  TABLE "author" --------------------------------------
-CREATE TABLE "author" (
+-- CREATE  TABLE "packager" --------------------------------------
+CREATE TABLE "packager" (
 	"id" BIGSERIAL,
-	"uuid_author" UUID DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+	"uuid_packager" UUID DEFAULT gen_random_uuid() NOT NULL UNIQUE,
 	"name" TEXT NOT NULL,
 	"email" TEXT NOT NULL,
 	"public_pem" TEXT NOT NULL,
@@ -102,25 +103,23 @@ CREATE TABLE "author" (
 -- -------------------------------------------------------------
 
 -- CREATE INDEX "idx_author" ---------------------------------
-CREATE INDEX "idx_author_id" ON "author" USING btree( "id" ASC NULLS LAST );
-CREATE INDEX "idx_author_uuid" ON "author" USING btree( "uuid_author" ASC NULLS LAST );
+CREATE INDEX "idx_packager_id" ON "packager" USING btree( "id" ASC NULLS LAST );
+CREATE INDEX "idx_packager_uuid" ON "packager" USING btree( "uuid_packager" ASC NULLS LAST );
 -- -------------------------------------------------------------
 
 
--- CREATE  TABLE "package_author" --------------------------------------
-CREATE TABLE "package_author" (
-	"uuid_package" UUID NOT NULL REFERENCES "package"("uuid_package") ON DELETE CASCADE,
-	"uuid_author" UUID NOT NULL REFERENCES "author"("uuid_author") ON DELETE CASCADE,
-	PRIMARY KEY ( "uuid_package", "uuid_author" ) );
- ;
--- -------------------------------------------------------------
+-- CREATE TABLE "package_packager" --------------------------------------
+CREATE TABLE "package_packager" (
+    "uuid_pkg_version" UUID NOT NULL REFERENCES "pkg_version"("uuid_pkg_version") ON DELETE CASCADE,
+    "uuid_packager" UUID NOT NULL REFERENCES "packager"("uuid_packager") ON DELETE CASCADE,
+    PRIMARY KEY ( "uuid_pkg_version", "uuid_packager" )
+);
 
--- CREATE INDEX "idx_package_author" ---------------------------------
-CREATE INDEX "idx_package_author_package" ON "package_author" USING btree( "uuid_package" ASC NULLS LAST );
-CREATE INDEX "idx_package_author_author" ON "package_author" USING btree( "uuid_author" ASC NULLS LAST );
--- -------------------------------------------------------------
+-- CREATE INDEX "idx_package_packager_pkg_version" ----------------------
+CREATE INDEX "idx_package_packager_pkg_version" ON "package_packager" USING btree( "uuid_pkg_version" ASC NULLS LAST );
 
-
+-- CREATE INDEX "idx_package_packager_packager" -------------------------
+CREATE INDEX "idx_package_packager_packager" ON "package_packager" USING btree( "uuid_packager" ASC NULLS LAST );
 
 
 -- CREATE  TABLE "package_metadata" -----------------------------
