@@ -125,7 +125,7 @@ CREATE INDEX "idx_package_packager_packager" ON "package_packager" USING btree( 
 -- CREATE  TABLE "package_metadata" -----------------------------
 CREATE  TABLE "package_metadata" ( 
 	"id" BIGSERIAL,
-	"uuid_package_metadata" UUid DEFAULT gen_random_uuid() NOT NULL,
+	"uuid_package_metadata" UUid DEFAULT gen_random_uuid() NOT NULL UNIQUE ,
 	"uuid_pkg_version" UUid NOT NULL REFERENCES "pkg_version"("uuid_pkg_version") ON DELETE CASCADE,
 	"creator" Text NOT NULL,
 	"contributor" Text,
