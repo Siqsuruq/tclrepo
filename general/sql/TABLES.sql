@@ -126,7 +126,7 @@ CREATE INDEX "idx_package_packager_packager" ON "package_packager" USING btree( 
 CREATE  TABLE "package_metadata" ( 
 	"id" BIGSERIAL,
 	"uuid_package_metadata" UUid DEFAULT gen_random_uuid() NOT NULL,
-	"uuid_package" UUid NOT NULL REFERENCES "package"("uuid_package") ON DELETE CASCADE,
+	"uuid_pkg_version" UUid NOT NULL REFERENCES "pkg_version"("uuid_pkg_version") ON DELETE CASCADE,
 	"creator" Text NOT NULL,
 	"contributor" Text,
 	"rights" Text,
@@ -228,3 +228,21 @@ CREATE TABLE "public"."repository" (
 -- CREATE INDEX "idx_repository" ------------------------------
 CREATE INDEX "idx_repository" ON "public"."repository" USING btree ("id" ASC NULLS LAST);
 -- -------------------------------------------------------------
+
+-- CREATE TABLE "package_dependency"
+CREATE TABLE "package_dependency" (
+    "id" BIGSERIAL PRIMARY KEY,
+    "uuid_package_dependency" UUID DEFAULT gen_random_uuid() NOT NULL,
+    "uuid_package_metadata" UUID NOT NULL REFERENCES "package_metadata"("uuid_package_metadata") ON DELETE CASCADE,
+    "dependency_type" TEXT CHECK (dependency_type IN ('Require', 'Recommend', 'Suggest', 'Conflict')) NOT NULL,
+    "package_name" TEXT NOT NULL,
+    "version" TEXT
+);
+
+-- CREATE INDEX "idx_package_dependency_uuid_package_metadata"
+CREATE INDEX "idx_package_dependency_uuid_package_metadata" 
+ON "package_dependency" USING btree("uuid_package_metadata");
+
+-- CREATE INDEX "idx_package_dependency_dependency_type"
+CREATE INDEX "idx_package_dependency_dependency_type" 
+ON "package_dependency" USING btree("dependency_type");
