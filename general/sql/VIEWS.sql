@@ -57,8 +57,9 @@ CREATE OR REPLACE VIEW "public"."v_latest_package_versions" AS  SELECT iv_packag
   WHERE (iv_package_versions_with_rn.rn = 1);;
 -- -------------------------------------------------------------
 
--- CREATE VIEW "v_download" ------------------------------------
-CREATE OR REPLACE VIEW "public"."v_download" AS  SELECT v_latest_package_versions.id,
+CREATE OR REPLACE VIEW "public"."v_download" AS
+SELECT 
+    v_latest_package_versions.id,
     v_latest_package_versions.uuid_pkg_version,
     v_latest_package_versions.uuid_package,
     v_latest_package_versions.uuid_platform,
@@ -72,10 +73,12 @@ CREATE OR REPLACE VIEW "public"."v_download" AS  SELECT v_latest_package_version
     v_latest_package_versions.package_category,
     v_latest_package_versions.rn,
     concat('<a href="', dz_conf.val, '/api/v2/download/package/', v_latest_package_versions.uuid_pkg_version, '"><i class="bi bi-cloud-download"></i></a>') AS download,
-    concat('<a href="', dz_conf.val, '/api/v2/info/package/', v_latest_package_versions.uuid_pkg_version, '"><i class="bi bi bi-info-square"></i></a>') AS info
-   FROM v_latest_package_versions,
+    concat('<a href="#" class="info-link" data-bs-toggle="modal" data-bs-target="#metadataModal" data-package-id="', v_latest_package_versions.uuid_pkg_version, '"><i class="bi bi-info-square"></i></a>') AS info
+FROM 
+    v_latest_package_versions,
     dz_conf
-  WHERE (dz_conf.var = 'domain_name'::text);;
--- -------------------------------------------------------------
+WHERE 
+    dz_conf.var = 'domain_name'::text;
+
 
 COMMIT;
