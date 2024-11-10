@@ -81,4 +81,11 @@ WHERE
     dz_conf.var = 'domain_name'::text;
 
 
+-- CREATE VIEW "stats_package_counts" --------------------------
+CREATE OR REPLACE VIEW "public"."stats_package_counts" AS  SELECT ( SELECT count(*) AS count
+           FROM package) AS package_count,
+    ( SELECT count(*) AS count
+           FROM pkg_version) AS package_version_count;;
+-- -------------------------------------------------------------
+
 COMMIT;
