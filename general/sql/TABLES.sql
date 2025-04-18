@@ -98,6 +98,7 @@ CREATE TABLE "packager" (
 	"public_pem" TEXT NOT NULL,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
 	"approved" Boolean DEFAULT 'false' NOT NULL,
+	"uuid_user" UUid NOT NULL UNIQUE,
 	PRIMARY KEY ( "id" ) );
  ;
 -- -------------------------------------------------------------

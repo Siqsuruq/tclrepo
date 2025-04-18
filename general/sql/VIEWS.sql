@@ -88,4 +88,45 @@ CREATE OR REPLACE VIEW "public"."stats_package_counts" AS  SELECT ( SELECT count
            FROM pkg_version) AS package_version_count;;
 -- -------------------------------------------------------------
 
+-- CREATE VIEW "v_package_packager" --------------------------
+CREATE OR REPLACE VIEW v_package_packager AS
+SELECT
+    -- From pkg_version
+    pv.uuid_pkg_version,
+    pv.version AS pkg_version,
+    pv.uploaded_timestamp,
+    pv.uploaded_timestamp::date AS upload_date,
+    TO_CHAR(pv.uploaded_timestamp, 'HH24:MI') AS upload_time,
+    pv.path AS pkg_version_path,
+    pv.uuid_platform,
+
+    -- From platform
+    pl.name AS platform_name,
+    pl.description AS platform_description,
+    pl.extra AS platform_extra,
+
+    -- From package
+    pk.uuid_package,
+    pk.name AS package_name,
+    pk.description AS package_description,
+    pk.uuid_category,
+    pk.path AS package_path,
+    pk.extra AS package_extra,
+
+    -- From packager
+    pp.uuid_packager,
+    pg.name AS packager_name,
+    pg.email AS packager_email,
+    pg.public_pem,
+    pg.approved,
+    pg.extra AS packager_extra,
+    pg.uuid_user
+
+FROM pkg_version pv
+JOIN package pk ON pk.uuid_package = pv.uuid_package
+JOIN platform pl ON pl.uuid_platform = pv.uuid_platform
+LEFT JOIN package_packager pp ON pp.uuid_pkg_version = pv.uuid_pkg_version
+LEFT JOIN packager pg ON pg.uuid_packager = pp.uuid_packager;
+-- -------------------------------------------------------------
+
 COMMIT;
