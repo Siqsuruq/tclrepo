@@ -132,7 +132,7 @@ CREATE  TABLE "package_metadata" (
 	"maintainer" Text,
 	"contributor" Text,
 	"rights" Text,
-	"URL" Text,
+	"url" Text,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
 	PRIMARY KEY ( "id", "uuid_package_metadata" ) );
  ;
