@@ -129,6 +129,7 @@ CREATE  TABLE "package_metadata" (
 	"uuid_package_metadata" UUid DEFAULT gen_random_uuid() NOT NULL UNIQUE ,
 	"uuid_pkg_version" UUid NOT NULL REFERENCES "pkg_version"("uuid_pkg_version") ON DELETE CASCADE,
 	"creator" Text NOT NULL,
+	"maintainer" Text,
 	"contributor" Text,
 	"rights" Text,
 	"URL" Text,
