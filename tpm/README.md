@@ -42,6 +42,7 @@ cd tpm
 
 ```bash
 tclsh main.tcl
+```
 
 3. Use interactive commands:
 
@@ -52,8 +53,10 @@ tclsh main.tcl
 > available
 > install nats
 > exit
+```
 
 ## 💡 Example Output
+
 ```bash
 > available
 Fetching packages from remote...
@@ -67,3 +70,4 @@ Installing to: /home/user/.local/lib/tpm
 
 > installed nats
 ✓ nats                 version: 3.1.1
+```
