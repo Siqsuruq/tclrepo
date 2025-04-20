@@ -129,4 +129,37 @@ LEFT JOIN package_packager pp ON pp.uuid_pkg_version = pv.uuid_pkg_version
 LEFT JOIN packager pg ON pg.uuid_packager = pp.uuid_packager;
 -- -------------------------------------------------------------
 
+CREATE OR REPLACE VIEW "public"."v_package_metadata" AS
+SELECT
+    pm.id AS package_metadata_id,
+    pm.uuid_package_metadata,
+    pv.uuid_pkg_version,  -- <=== this is the fix
+    pv.uuid_package,
+    pv.version,
+    pv.uploaded_timestamp,
+    (pv.uploaded_timestamp)::date AS uploaded_date,
+    to_char(pv.uploaded_timestamp, 'HH24:MI') AS uploaded_time,
+    pv.path,
+    pv.extra AS version_extra,
+    pl.uuid_platform,
+    pl.name AS platform_name,
+    pl.description AS platform_description,
+    pl.extra AS platform_extra,
+    lic.uuid_license,
+    lic.name AS license_name,
+    lic.link AS license_link,
+    lic.lic_text AS license_text,
+    lic.extra AS license_extra,
+    pm.creator,
+    pm.maintainer,
+    pm.contributor,
+    pm.rights,
+    pm.url,
+    pm.extra AS metadata_extra
+FROM pkg_version pv
+JOIN platform pl ON pv.uuid_platform = pl.uuid_platform
+JOIN license lic ON pv.uuid_license = lic.uuid_license
+LEFT JOIN package_metadata pm ON pm.uuid_pkg_version = pv.uuid_pkg_version;
+
+
 COMMIT;
