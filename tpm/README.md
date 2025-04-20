@@ -36,6 +36,7 @@ TPM is a cross-platform command-line utility to download and install packages fr
 ```bash
 git clone https://github.com/Siqsuruq/tclrepo
 cd tpm
+```
 
 2. Run the TPM shell:
 
