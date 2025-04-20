@@ -71,3 +71,22 @@ Installing to: /home/user/.local/lib/tpm
 > installed nats
 ✓ nats                 version: 3.1.1
 ```
+
+## 📂 Folder Structure
+```bash
+main.tcl            # Entry point
+app.tcl             # CLI application logic
+pkgdb.tcl           # Local/remote package metadata manager
+installer.tcl       # Download + install logic
+net.tcl             # HTTP client to fetch remote data
+system.tcl          # System/environment info singleton
+var/config          # Local configuration file
+```
+
+## 🐛 Found a Bug?
+
+Open an issue or a pull request — contributions are welcome!
+
+## 📜 License
+
+MIT License. Free for personal or commercial use.
