@@ -37,7 +37,7 @@ INSERT INTO "category" ("uuid_category","name") VALUES
 ( '42643c52-74d0-4a7f-9c9b-c0afa1267c7b', 'Standard Libraries');
 
 INSERT INTO "dz_conf"("module","var","val") VALUES
-	(NULL, 'domain_name', 'https://tclrepo.msysc.org'),
+	(NULL, 'domain_name', 'https://tclrepo.daidze.org'),
 	(NULL, 'repo_path', '/opt/ns/client/repo'),
 	(NULL, 'language', 'en'),
 	('date_time', 'date_format', '%d-%m-%Y'),
@@ -75,4 +75,5 @@ INSERT INTO "license"( "name", "link")  VALUES
 	('LGPL-2.1', 'https://opensource.org/license/lgpl-2-1'),
 	('LGPL-3.0-only', 'https://opensource.org/license/lgpl-3-0'),
 	('MPL-1.1', 'https://opensource.org/license/mpl-1-1'),
-	('MPL-2.0', 'https://opensource.org/license/mpl-2-0');
+	('MPL-2.0', 'https://opensource.org/license/mpl-2-0'),
+	('Tcl/Tk License', 'https://www.tcl-lang.org/software/tcltk/license.html');
