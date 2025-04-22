@@ -76,6 +76,7 @@ CREATE TABLE "pkg_version" (
 	"uuid_platform" UUid NOT NULL,
 	"uploaded_timestamp" Timestamp With Time Zone DEFAULT now() NOT NULL,
 	"path" TEXT NOT NULL,
+	"description" TEXT,
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
 	PRIMARY KEY ( "id", "uuid_pkg_version" ),
 	UNIQUE ("uuid_pkg_version")	);
