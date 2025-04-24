@@ -28,23 +28,39 @@ namespace eval tpm {
 
         :public method refresh {} {
             set :installed_pkgs {} ;# reset
+            set base_dir [file normalize [file dirname [info script]]]
 
             foreach path $::auto_path {
-                if {![file isdirectory $path]} continue
+                set norm_path [file normalize $path]
+                if {![file isdirectory $norm_path]} continue
+                if {[string match "$base_dir/libs*" $norm_path]} continue  ;# Skip internal libs
 
-                set pkgs [glob -nocomplain -type f -directory $path */pkgIndex.tcl]
-                foreach indexfile $pkgs {
+                # 1. pkgIndex.tcl-style detection
+                set pkgFiles [glob -nocomplain -type f -directory $norm_path */pkgIndex.tcl]
+                foreach indexfile $pkgFiles {
                     set f [open $indexfile r]
                     while {[gets $f line] >= 0} {
-                        set pkg ""
-                        set ver ""
                         if {[regexp {package ifneeded ([^\s]+) ([^\s]+)} $line -> pkg ver]} {
                             dict set :installed_pkgs $pkg $ver
                         }
                     }
                     close $f
                 }
+
+                
+
+                foreach tmfile [fileutil::find $norm_path :is_tm_file] {
+                    set name [file tail $tmfile]
+                    if {[regexp {^(.+)-(\d+(?:\.\d+)*).tm$} $name -> pkg ver]} {
+                        dict set :installed_pkgs $pkg $ver
+                    }
+                }
             }
+        }
+
+        # Custom filter: only include files ending in .tm
+        :method is_tm_file {file} {
+            return [string match *.tm [file tail $file]]
         }
 
         :public method list_installed {} {

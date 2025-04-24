@@ -1,10 +1,14 @@
 #!/usr/bin/env tclsh
+# Extend package path to include local libs/
+set here [file dirname [file normalize [info script]]]
+lappend auto_path [file join $here libs]
+
 package require nx
 package require http
 package require tls 2.0b1
 package require json
 package require zipfile::decode
-package require zlibtcl
+package require fileutil
 
 ::http::register https 443 ::tls::socket
 
