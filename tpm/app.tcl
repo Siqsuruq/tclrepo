@@ -44,6 +44,13 @@ namespace eval tpm {
                         :install_package [lindex $args 0]
                     }
                 }
+                delete {
+                    if {[llength $args] != 1} {
+                        puts "Usage: delete <package>"
+                    } else {
+                        :delete_package [lindex $args 0]
+                    }
+                }
                 help {
                     :help
                 }
@@ -95,12 +102,23 @@ namespace eval tpm {
             $inst destroy
         }
 
+        :method delete_package {pkgName} {
+            if {![${:pkgdbObj} is_installed $pkgName]} {
+                puts "Package '$pkgName' is not installed."
+                return
+            }
+            set inst [::tpm::installer new -pkgdbObj ${:pkgdbObj}] 
+            $inst uninstall $pkgName
+            $inst destroy
+        }
+
         :method help {} {
             puts "Available commands:"
             puts "  installed                 List all locally installed packages"
             puts "  installed <name(s)>       Show version info of a specific installed package(s)"
             puts "  available                 List packages in the remote repository"
             puts "  install <name>            Install package from the remote repository"
+            puts "  delete <name>             Delete (uninstall) package"
             puts "  help                      Show this help message"
             puts "  exit                      Exit the package manager"
         }

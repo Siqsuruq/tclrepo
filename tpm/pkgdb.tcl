@@ -41,18 +41,15 @@ namespace eval tpm {
                     set f [open $indexfile r]
                     while {[gets $f line] >= 0} {
                         if {[regexp {package ifneeded ([^\s]+) ([^\s]+)} $line -> pkg ver]} {
-                            dict set :installed_pkgs $pkg $ver
+                            dict set :installed_pkgs $pkg [dict create version $ver path [file dirname $indexfile]]
                         }
                     }
                     close $f
                 }
-
-                
-
                 foreach tmfile [fileutil::find $norm_path :is_tm_file] {
                     set name [file tail $tmfile]
                     if {[regexp {^(.+)-(\d+(?:\.\d+)*).tm$} $name -> pkg ver]} {
-                        dict set :installed_pkgs $pkg $ver
+                        dict set :installed_pkgs $pkg [dict create version $ver path [file dirname $tmfile]]
                     }
                 }
             }
@@ -79,9 +76,16 @@ namespace eval tpm {
 
         :public method get_version {pkg} {
             if {[dict exists ${:installed_pkgs} $pkg]} {
-                return [dict get ${:installed_pkgs} $pkg]
+                return [dict get [dict get ${:installed_pkgs} $pkg] version]
             }
             return ""
+        }
+
+        :public method get_install_info {pkgName} {
+            if {![dict exists ${:installed_pkgs} $pkgName]} {
+            return ""
+        }
+            return [dict get ${:installed_pkgs} $pkgName]
         }
     }
 }

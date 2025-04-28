@@ -1,7 +1,7 @@
 #!/usr/bin/env tclsh
 # Extend package path to include local libs/
 set here [file dirname [file normalize [info script]]]
-lappend auto_path [file join $here libs]
+set auto_path [linsert $auto_path 0 [file join $here libs]]
 
 package require nx
 package require http

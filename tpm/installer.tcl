@@ -64,5 +64,38 @@ namespace eval tpm {
                 return -code error "Failed to unzip '$zip_path': $errMsg"
             }
         }
+
+        :public method uninstall {pkgName} {
+            # Find where the package was installed
+            set install_info [${:pkgdbObj} get_install_info $pkgName]
+
+            if {$install_info eq ""} {
+                puts "Cannot find installation information for '$pkgName'."
+                return
+            }
+
+            set install_path [dict get $install_info path]
+
+            if {![file exists $install_path]} {
+                puts "Installed package path does not exist: $install_path"
+                return
+            }
+
+            puts "Removing package from: $install_path"
+
+            if {[catch {
+                file delete -force -- $install_path
+            } err]} {
+                puts "Failed to delete package: $err"
+                return
+            }
+
+            # Update the database after successful deletion
+            ${:pkgdbObj} delete_package $pkgName
+            ${:pkgdbObj} refresh
+
+            puts "Package '$pkgName' uninstalled successfully."
+        }
+
     }
 }
