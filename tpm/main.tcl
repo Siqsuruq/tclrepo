@@ -1,5 +1,12 @@
 #!/usr/bin/env tclsh
 # Extend package path to include local libs/
+
+# Save original auto_path before adding local libs
+namespace eval tpm {
+    set original_auto_path $::auto_path
+}
+
+
 set here [file dirname [file normalize [info script]]]
 set auto_path [linsert $auto_path 0 [file join $here libs]]
 
