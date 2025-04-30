@@ -2,6 +2,7 @@ namespace eval tpm {
     nx::Class create app {
         :property {pkgdbObj:object,type=pkgdb,substdefault {[::tpm::pkgdb new]}}
         :property {netObj:object,type=net,substdefault {[::tpm::net new]}}
+        :property {sysObj:object,type=system,substdefault {[::tpm::system new]}}
 
         :method init {} {
         }
@@ -36,6 +37,10 @@ namespace eval tpm {
                 }
                 available {
                     :list_remote
+                }
+                system {
+                    puts "System information:"
+                    ${:sysObj} print_summary
                 }
                 install {
                     if {[llength $args] != 1} {
