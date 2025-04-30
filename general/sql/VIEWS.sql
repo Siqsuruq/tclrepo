@@ -14,6 +14,7 @@ SELECT
 	p.name AS platform_name,
 	pa.name AS package_name,
 	pa.description AS package_description,
+	pv.description AS pkg_version_description,
 	c.name AS package_category
 FROM
   ((pkg_version pv
@@ -34,6 +35,7 @@ CREATE OR REPLACE VIEW "public"."iv_package_versions_with_rn" AS  SELECT v_packa
     v_package_versions.platform_name,
     v_package_versions.package_name,
 	v_package_versions.package_description,
+	v_package_versions.pkg_version_description,
 	v_package_versions.package_category,
     row_number() OVER (PARTITION BY v_package_versions.uuid_package, v_package_versions.uuid_platform ORDER BY (string_to_array(v_package_versions.version, '.'::text))::integer[] DESC) AS rn
    FROM v_package_versions;;
@@ -51,6 +53,7 @@ CREATE OR REPLACE VIEW "public"."v_latest_package_versions" AS  SELECT iv_packag
     iv_package_versions_with_rn.platform_name,
     iv_package_versions_with_rn.package_name,
 	iv_package_versions_with_rn.package_description,
+	iv_package_versions_with_rn.pkg_version_description,
 	iv_package_versions_with_rn.package_category,
     iv_package_versions_with_rn.rn
    FROM iv_package_versions_with_rn
@@ -70,6 +73,7 @@ SELECT
     v_latest_package_versions.platform_name,
     v_latest_package_versions.package_name,
     v_latest_package_versions.package_description,
+	v_latest_package_versions.pkg_version_description,
     v_latest_package_versions.package_category,
     v_latest_package_versions.rn,
     concat('<a href="', dz_conf.val, '/api/v2/download/package/', v_latest_package_versions.uuid_pkg_version, '"><i class="bi bi-cloud-download"></i></a>') AS download,

@@ -47,9 +47,15 @@ namespace eval tpm {
                     close $f
                 }
                 foreach tmfile [fileutil::find $norm_path :is_tm_file] {
-                    set name [file tail $tmfile]
-                    if {[regexp {^(.+)-(\d+(?:\.\d+)*).tm$} $name -> pkg ver]} {
-                        dict set :installed_pkgs $pkg [dict create version $ver path [file dirname $tmfile]]
+                    set f [open $tmfile r]
+                    set contents [read $f]
+                    close $f
+
+                    # Extract all "package provide <name> <version>" lines
+                    foreach {line} [split $contents "\n"] {
+                        if {[regexp {package provide\s+([^\s]+)\s+([^\s]+)} $line -> pkg ver]} {
+                            dict set :installed_pkgs $pkg [dict create version $ver path [file dirname $tmfile]]
+                        }
                     }
                 }
             }

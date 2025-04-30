@@ -68,7 +68,7 @@ namespace eval tpm {
         :public method uninstall {pkgName} {
             # Find where the package was installed
             set install_info [${:pkgdbObj} get_install_info $pkgName]
-
+            puts "Package installation info: $install_info"
             if {$install_info eq ""} {
                 puts "Cannot find installation information for '$pkgName'."
                 return
@@ -89,11 +89,8 @@ namespace eval tpm {
                 puts "Failed to delete package: $err"
                 return
             }
-
             # Update the database after successful deletion
-            ${:pkgdbObj} delete_package $pkgName
             ${:pkgdbObj} refresh
-
             puts "Package '$pkgName' uninstalled successfully."
         }
 
