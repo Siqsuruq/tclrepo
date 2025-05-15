@@ -124,6 +124,7 @@ namespace eval tpm {
             puts "  available                 List packages in the remote repository"
             puts "  install <name>            Install package from the remote repository"
             puts "  delete <name>             Delete (uninstall) package"
+            puts "  system                    Shows current system information"
             puts "  help                      Show this help message"
             puts "  exit                      Exit the package manager"
         }

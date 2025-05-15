@@ -14,7 +14,10 @@ namespace eval tpm {
             set base [string trimright ${:repo_url} "/"]
             set listUrl "$base/packages/list_packages"
 
-            set token [::http::geturl $listUrl]
+            set start [clock milliseconds]
+            set token [::http::geturl $listUrl -binary true -keepalive 1]
+            set duration [expr {[clock milliseconds] - $start}]
+            puts "Fetch took ${duration} ms"
 
             if {[::http::status $token] ne "ok"} {
                 set errorMsg "Failed to fetch package list from $listUrl"
