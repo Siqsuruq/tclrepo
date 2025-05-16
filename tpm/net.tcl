@@ -17,7 +17,7 @@ namespace eval tpm {
             set start [clock milliseconds]
             set token [::http::geturl $listUrl -binary true -keepalive 1]
             set duration [expr {[clock milliseconds] - $start}]
-            puts "Fetch took ${duration} ms"
+            puts "Fetch took: ${duration} ms"
 
             if {[::http::status $token] ne "ok"} {
                 set errorMsg "Failed to fetch package list from $listUrl"
