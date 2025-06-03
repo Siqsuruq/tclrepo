@@ -1,5 +1,5 @@
 namespace eval tpm {
-    nx::Class create system {
+    nx::Class create system -mixin Helper {
         :variable instance:object
 
         :public object method create {args} {
@@ -20,21 +20,20 @@ namespace eval tpm {
         }
 
         :public method print_summary {} {
-            puts "Tcl executable path : [info nameofexecutable]"
-            puts "Tcl library path    : $::tcl_library"
-            puts "Package path(s)     :"
+            :cputs_multi [list green "Tcl executable path: " blue "[info nameofexecutable]"]
+            :cputs_multi [list green "Tcl library path: " blue "$::tcl_library"]
+            :cputs_multi [list green "Tcl executable path: " blue "[info nameofexecutable]"]
+
+            :cputs green "Package path(s):"
             foreach path $::auto_path {
-                puts "  $path"
+                :cputs blue "    $path"
             }
 
-            if {[info exists ::tcl_platform(os)] && [info exists ::tcl_platform(machine)]} {
-                puts "Platform            : $::tcl_platform(os) / $::tcl_platform(machine)"
-            }
-
-            puts "Writable install path: [:get_install_path]"
+            :cputs_multi [list green "Tcl Platform: " blue "[platform::generic]"]
+            :cputs_multi [list green "Writable install path: " blue "[:get_install_path]"]
 
             set base [file dirname [file normalize [info script]]]
-            puts "Config path         : [file join $base var config]"
+            :cputs_multi [list green "Config path: " blue "[file join $base var config]"]
         }
     }
 }

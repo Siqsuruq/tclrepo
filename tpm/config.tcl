@@ -1,39 +1,33 @@
-nx::Object create ::tpm::config {
-    :object property {default_repo_url "https://tclrepo.daidze.org/api/v2"}
-    :object property config_path
+namespace eval tpm {
+    nx::Object create config {
+        :object property {basedir:substdefault {[file dirname [file normalize [info script]]]}}
+        :object property {default_repo_url "https://tclrepo.daidze.org/api/v2"}
+        :object property config_path
 
-    :public object method init {} {
-        set basedir [file dirname [file normalize [info script]]]
-        set :config_path [file join $basedir var config]
-
-        if {![file exists [file dirname ${:config_path}]]} {
-            file mkdir [file dirname ${:config_path}]
+        :public object method init {} {
+            set :config_path [file join ${:basedir} var config.ini]
+            :read_config
         }
 
-        if {[file exists ${:config_path}]} {
+        :object method read_config {} {
             try {
-                set f [open ${:config_path} r]
-                while {[gets $f line] >= 0} {
-                    if {[regexp {^([^=]+)=(.+)$} $line -> key val]} {
-                        if {[info exists :$key]} {
-                            set :$key $val
-                        }
-                    }
-                }
-                close $f
-            } trap error {msg} {
-                puts "⚠️ Failed to load config: $msg"
+                set f [::ini::open ${:config_path} r]
+                set value [::ini::value $f "repository" "default_repo_url"]
+                set :default_repo_url $value
+                ::ini::close $f
+            } on error {errMsg} {
+                puts "Failed to load config: $errMsg"
             }
         }
-    }
 
-    :public object method save {} {
-        set f [open ${:config_path} w]
-        puts $f "# tpm config"
-        foreach name [info object variables] {
-            if {$name eq "config_path"} continue
-            puts $f "$name=[set :$name]"
+        :public object method save {} {
+            set f [open ${:config_path} w]
+            puts $f "# tpm config"
+            foreach name [info object variables] {
+                if {$name eq "config_path"} continue
+                puts $f "$name=[set :$name]"
+            }
+            close $f
         }
-        close $f
     }
 }

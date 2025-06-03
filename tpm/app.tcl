@@ -1,5 +1,5 @@
 namespace eval tpm {
-    nx::Class create app {
+    nx::Class create app -mixin Helper {
         :property {pkgdbObj:object,type=pkgdb,substdefault {[::tpm::pkgdb new]}}
         :property {netObj:object,type=net,substdefault {[::tpm::net new]}}
         :property {sysObj:object,type=system,substdefault {[::tpm::system new]}}
@@ -8,16 +8,16 @@ namespace eval tpm {
         }
 
         :public method start {} {
-            puts "Welcome to tpm (NX version)"
-            puts "Type 'help' for commands. Type 'exit' to quit."
-            puts "Repository: [::tpm::config cget -default_repo_url]"
-            puts "----------------------------------"
+            :cputs green "Welcome to tpm (NX version)"
+            :cputs_multi [list green "Type " blue "'help' " green "for commands. Type " blue "'exit' " green "to quit."]
+            :cputs_multi [list green "Repository: " blue "[::tpm::config cget -default_repo_url]"]
+            :cputs red "------------------------------------------------------"
 
             while {1} {
                 puts -nonewline "> "
                 flush stdout
                 if {[gets stdin line] < 0 || $line eq "exit"} {
-                    puts "Goodbye!"
+                    :cputs green "Goodbye!"
                     break
                 }
                 if {$line eq ""} {
@@ -39,19 +39,20 @@ namespace eval tpm {
                     :list_remote
                 }
                 system {
-                    puts "System information:"
+                    :cputs green "System information:"
+                    :cputs red "------------------------------------------------------"
                     ${:sysObj} print_summary
                 }
                 install {
                     if {[llength $args] != 1} {
-                        puts "Usage: install <package>"
+                        :cputs_multi [list green "Usage: " blue "install <package>"]
                     } else {
                         :install_package [lindex $args 0]
                     }
                 }
                 delete {
                     if {[llength $args] != 1} {
-                        puts "Usage: delete <package>"
+                        :cputs_multi [list green "Usage: " blue "delete <package>"]
                     } else {
                         :delete_package [lindex $args 0]
                     }
@@ -60,7 +61,7 @@ namespace eval tpm {
                     :help
                 }
                 default {
-                    puts "Unknown command: $cmd"
+                    :cputs_multi [list red "Unknown command: " blue "$cmd"]
                     :help
                 }
             }
@@ -82,24 +83,41 @@ namespace eval tpm {
             }
         }
 
-        :method list_remote {} {
-            puts "Fetching packages from remote..."
+        :public method list_remote {} {
             try {
                 set net [::tpm::net new]
                 set packages [$net fetch_package_index]
                 $net destroy
+
+                # Header
+                :cputs_multi [list \
+                    cyan " - " \
+                    yellow "Package Name         " \
+                    green "Version   " \
+                    blue "(Platform): " \
+                    magenta "Description" \
+                ]
 
                 foreach pkg $packages {
                     set name      [dict get $pkg package_name]
                     set version   [dict get $pkg version]
                     set platform  [dict get $pkg platform_name]
                     set desc      [dict get $pkg package_description]
-                    puts [format " - %-20s %-8s (%s): %s" $name $version $platform $desc]
+
+                    set line [list \
+                        cyan " - " \
+                        yellow [format "%-20s" $name] \
+                        green  [format "%-8s" $version] \
+                        blue   [format "(%s): " $platform] \
+                        magenta $desc \
+                    ]
+                    :cputs_multi $line
                 }
-            } trap error {msg} {
-                puts "✗ Error: $msg"
+            } on error {errMsg} {
+                :cputs_multi [list red_bold "Error: " red "$errMsg"]
             }
         }
+
 
         :method install_package {pkgName} {
             set inst [::tpm::installer new -pkgdbObj ${:pkgdbObj}] 
@@ -118,15 +136,16 @@ namespace eval tpm {
         }
 
         :method help {} {
-            puts "Available commands:"
-            puts "  installed                 List all locally installed packages"
-            puts "  installed <name(s)>       Show version info of a specific installed package(s)"
-            puts "  available                 List packages in the remote repository"
-            puts "  install <name>            Install package from the remote repository"
-            puts "  delete <name>             Delete (uninstall) package"
-            puts "  system                    Shows current system information"
-            puts "  help                      Show this help message"
-            puts "  exit                      Exit the package manager"
+            :cputs green "Available commands:"
+            :cputs red "------------------------------------------------------"
+            :cputs_multi [list green "  installed                 " blue "List all locally installed packages"]
+            :cputs_multi [list green "  installed <name(s)>       " blue "Show version info of a specific installed package(s)"]
+            :cputs_multi [list green "  available                 " blue "List packages in the remote repository"]
+            :cputs_multi [list green "  install <name>            " blue "Install package from the remote repository"]
+            :cputs_multi [list green "  delete <name>             " blue "Delete (uninstall) package"]
+            :cputs_multi [list green "  system                    " blue "Shows current system information"]
+            :cputs_multi [list green "  help                      " blue "Show this help message"]
+            :cputs_multi [list green "  exit                      " blue "Exit the package manager"]
         }
     }
 }

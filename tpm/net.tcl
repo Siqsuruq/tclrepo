@@ -1,12 +1,11 @@
 namespace eval tpm {
-    nx::Class create net {
-        :property {repo_url ""}
+    nx::Class create net -mixin Helper {
+        :property {repo_url:substdefault {[::tpm::config cget -default_repo_url]}}
 
-        :method init {} {
-            set :repo_url [::tpm::config cget -default_repo_url]
-        }
 
         :public method fetch_package_index {} {
+            :cputs green "Fetching packages from remote..."
+            :cputs magenta "Network object initialized with repository URL: ${:repo_url}"
             if {${:repo_url} eq ""} {
                 return -code error "No repository URL configured."
             }
@@ -17,8 +16,9 @@ namespace eval tpm {
             set start [clock milliseconds]
             set token [::http::geturl $listUrl -binary true -keepalive 1]
             set duration [expr {[clock milliseconds] - $start}]
-            puts "Fetch took: ${duration} ms"
-
+            :cputs_multi [list green "Fetch took: " blue "${duration} ms"]
+            :cputs red "------------------------------------------------------"
+            
             if {[::http::status $token] ne "ok"} {
                 set errorMsg "Failed to fetch package list from $listUrl"
                 catch {::http::cleanup $token}
