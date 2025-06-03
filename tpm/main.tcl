@@ -23,7 +23,7 @@ package require inifile
 ::http::register https 443 ::tls::socket
 
 # Load modules
-foreach file {config.tcl helper.tcl system.tcl net.tcl installer.tcl pkgdb.tcl app.tcl} {
+foreach file {config.tcl helper.tcl pkgParser.tcl system.tcl net.tcl installer.tcl pkgdb.tcl app.tcl} {
     source [file join [file dirname [file normalize [info script]]] $file]
 }
 ::tpm::config init

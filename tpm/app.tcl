@@ -69,7 +69,8 @@ namespace eval tpm {
 
         :method list_local {args} {
             if {[llength $args] == 0} {
-                puts "Locally installed packages:"
+                :cputs green "Locally installed packages:"
+                :cputs red "------------------------------------------------------"
                 ${:pkgdbObj} list_installed
             } else {
                 foreach pkg $args {
@@ -88,16 +89,6 @@ namespace eval tpm {
                 set net [::tpm::net new]
                 set packages [$net fetch_package_index]
                 $net destroy
-
-                # Header
-                :cputs_multi [list \
-                    cyan " - " \
-                    yellow "Package Name         " \
-                    green "Version   " \
-                    blue "(Platform): " \
-                    magenta "Description" \
-                ]
-
                 foreach pkg $packages {
                     set name      [dict get $pkg package_name]
                     set version   [dict get $pkg version]
@@ -117,7 +108,6 @@ namespace eval tpm {
                 :cputs_multi [list red_bold "Error: " red "$errMsg"]
             }
         }
-
 
         :method install_package {pkgName} {
             set inst [::tpm::installer new -pkgdbObj ${:pkgdbObj}] 

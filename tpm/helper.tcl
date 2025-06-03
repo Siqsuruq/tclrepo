@@ -13,6 +13,7 @@ namespace eval tpm {
                 cyan    "1;36"
                 reset   "0"
             }
+            next
         }
  
         :public method cputs {args} {

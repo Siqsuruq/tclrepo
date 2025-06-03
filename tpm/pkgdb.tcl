@@ -1,5 +1,5 @@
 namespace eval tpm {
-    nx::Class create pkgdb {
+    nx::Class create pkgdb -mixin Helper {
         :property {installed_pkgs ""}
         :property {available_pkgs ""}
 
@@ -29,36 +29,40 @@ namespace eval tpm {
         :public method refresh {} {
             set :installed_pkgs {} ;# reset
             set base_dir [file normalize [file dirname [info script]]]
+            
+            set pkgParserObj [::tpm::pkgParser new -pkgDirs $::tpm::original_auto_path]
+            set :installed_pkgs [$pkgParserObj get_packages]
 
-            foreach path $::auto_path {
-                set norm_path [file normalize $path]
-                if {![file isdirectory $norm_path]} continue
-                if {[string match "$base_dir/libs*" $norm_path]} continue  ;# Skip internal libs
+            # foreach path $::tpm::original_auto_path {
+            #     puts "Scanning for installed packages in: $path"
+            #     set norm_path [file normalize $path]
+            #     if {![file isdirectory $norm_path]} continue
 
-                # 1. pkgIndex.tcl-style detection
-                set pkgFiles [glob -nocomplain -type f -directory $norm_path */pkgIndex.tcl]
-                foreach indexfile $pkgFiles {
-                    set f [open $indexfile r]
-                    while {[gets $f line] >= 0} {
-                        if {[regexp {package ifneeded ([^\s]+) ([^\s]+)} $line -> pkg ver]} {
-                            dict set :installed_pkgs $pkg [dict create version $ver path [file dirname $indexfile]]
-                        }
-                    }
-                    close $f
-                }
-                foreach tmfile [fileutil::find $norm_path :is_tm_file] {
-                    set f [open $tmfile r]
-                    set contents [read $f]
-                    close $f
+            #     # 1. pkgIndex.tcl-style detection
+            #     set pkgFiles [glob -nocomplain -type f -directory $norm_path */pkgIndex.tcl]
+            #     puts "Found pkgIndex.tcl files: $pkgFiles"
+            #     # foreach indexfile $pkgFiles {
+            #     #     set f [open $indexfile r]
+            #     #     while {[gets $f line] >= 0} {
+            #     #         if {[regexp {package ifneeded ([^\s]+) ([^\s]+)} $line -> pkg ver]} {
+            #     #             dict set :installed_pkgs $pkg [dict create version $ver path [file dirname $indexfile]]
+            #     #         }
+            #     #     }
+            #     #     close $f
+            #     # }
+            #     # foreach tmfile [fileutil::find $norm_path :is_tm_file] {
+            #     #     set f [open $tmfile r]
+            #     #     set contents [read $f]
+            #     #     close $f
 
-                    # Extract all "package provide <name> <version>" lines
-                    foreach {line} [split $contents "\n"] {
-                        if {[regexp {package provide\s+([^\s]+)\s+([^\s]+)} $line -> pkg ver]} {
-                            dict set :installed_pkgs $pkg [dict create version $ver path [file dirname $tmfile]]
-                        }
-                    }
-                }
-            }
+            #     #     # Extract all "package provide <name> <version>" lines
+            #     #     foreach {line} [split $contents "\n"] {
+            #     #         if {[regexp {package provide\s+([^\s]+)\s+([^\s]+)} $line -> pkg ver]} {
+            #     #             dict set :installed_pkgs $pkg [dict create version $ver path [file dirname $tmfile]]
+            #     #         }
+            #     #     }
+            #     # }
+            # }
         }
 
         # Custom filter: only include files ending in .tm
@@ -67,11 +71,16 @@ namespace eval tpm {
         }
 
         :public method list_installed {} {
-            if {[dict size ${:installed_pkgs}] == 0} {
+            if {[llength ${:installed_pkgs}] == 0} {
                 puts " (none found)"
             } else {
-                foreach {pkg ver} ${:installed_pkgs} {
-                    puts " - $pkg $ver"
+                foreach pkgDict ${:installed_pkgs} {
+                    set line [list \
+                        cyan " - " \
+                        yellow [format "%-20s" [dict get $pkgDict name]] \
+                        green  [format "%-8s" [dict get $pkgDict version]] \
+                    ]
+                    :cputs_multi $line
                 }
             }
         }
