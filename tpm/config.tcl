@@ -2,6 +2,7 @@ namespace eval tpm {
     nx::Object create config {
         :object property {basedir:substdefault {[file dirname [file normalize [info script]]]}}
         :object property {default_repo_url "https://tclrepo.daidze.org/api/v2"}
+        :object property {tpm_version ""}
         :object property config_path
 
         :public object method init {} {
@@ -12,8 +13,8 @@ namespace eval tpm {
         :object method read_config {} {
             try {
                 set f [::ini::open ${:config_path} r]
-                set value [::ini::value $f "repository" "default_repo_url"]
-                set :default_repo_url $value
+                set :default_repo_url [::ini::value $f "repository" "default_repo_url"]
+                set :tpm_version [::ini::value $f "tpm" "version"]
                 ::ini::close $f
             } on error {errMsg} {
                 puts "Failed to load config: $errMsg"

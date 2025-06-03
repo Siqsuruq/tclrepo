@@ -2,10 +2,8 @@ namespace eval tpm {
     nx::Class create net -mixin Helper {
         :property {repo_url:substdefault {[::tpm::config cget -default_repo_url]}}
 
-
         :public method fetch_package_index {} {
-            :cputs green "Fetching packages from remote..."
-            :cputs magenta "Network object initialized with repository URL: ${:repo_url}"
+            :cputs green "Fetching packages from remote repository: ${:repo_url}"
             if {${:repo_url} eq ""} {
                 return -code error "No repository URL configured."
             }

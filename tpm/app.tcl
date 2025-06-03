@@ -8,7 +8,7 @@ namespace eval tpm {
         }
 
         :public method start {} {
-            :cputs green "Welcome to tpm (NX version)"
+            :cputs green "Welcome to tpm (NX version) Version: [::tpm::config cget -tpm_version]"
             :cputs_multi [list green "Type " blue "'help' " green "for commands. Type " blue "'exit' " green "to quit."]
             :cputs_multi [list green "Repository: " blue "[::tpm::config cget -default_repo_url]"]
             :cputs red "------------------------------------------------------"
