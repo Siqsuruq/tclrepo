@@ -21,6 +21,20 @@ namespace eval tpm {
                 puts "Scanning for installed packages in: $norm_dir"
                 set files [glob -nocomplain -type f -directory $norm_dir */pkgIndex.tcl]
                 lappend pkgFiles {*}$files
+
+                foreach tmfile [fileutil::find $norm_dir :is_tm_file] {
+                    puts "Found TM File: $tmfile"
+                    set f [open $tmfile r]
+                    set contents [read $f]
+                    close $f
+
+                    # Extract all "package provide <name> <version>" lines
+                    foreach {line} [split $contents "\n"] {
+                        if {[regexp {package provide\s+([^\s]+)\s+([^\s]+)} $line -> pkg ver]} {
+                            dict set :installed_pkgs $pkg [dict create version $ver path [file dirname $tmfile]]
+                        }
+                    }
+                }
             }
             foreach pkgIndex $pkgFiles {
                 puts "Parsing pkgIndex file: $pkgIndex"
@@ -47,6 +61,10 @@ namespace eval tpm {
             } finally {
                 close $f
             }
+        }
+
+        :method is_tm_file {file} {
+            return [string match *.tm [file tail $file]]
         }
 
         :public method get_packages {} {
