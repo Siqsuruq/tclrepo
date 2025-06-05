@@ -68,17 +68,26 @@ namespace eval tpm {
         }
 
         :method list_local {args} {
+            :cputs green "Locally installed packages:"
+            :cputs red "------------------------------------------------------"
             if {[llength $args] == 0} {
-                :cputs green "Locally installed packages:"
-                :cputs red "------------------------------------------------------"
                 ${:pkgdbObj} list_installed
             } else {
                 foreach pkg $args {
                     if {[${:pkgdbObj} is_installed $pkg]} {
-                        set ver [${:pkgdbObj} get_version $pkg]
-                        puts [format "%-20s version: %s" $pkg $ver]
+                        set versions [${:pkgdbObj} get_installed_packages_by_name $pkg]
+                        foreach pkgDict $versions {
+                            set line [list \
+                                cyan " - " \
+                                yellow [format "%-20s" [dict get $pkgDict name]] \
+                                green  [format "%-8s" [dict get $pkgDict version]] \
+                                cyan  [format "%-40s" [dict get $pkgDict path]] \
+                                magenta [format "%-9s" [dict get $pkgDict type]] \
+                            ]
+                            :cputs_multi $line
+                        }
                     } else {
-                        puts [format "%-20s not installed" $pkg]
+                        :cputs_multi [list cyan " - " yellow "$pkg" red " is not installed."]
                     }
                 }
             }
@@ -116,8 +125,10 @@ namespace eval tpm {
         }
 
         :method delete_package {pkgName} {
+            :cputs_multi [list green "Deleting locally installed package: " yellow "$pkgName"]
+            :cputs red "------------------------------------------------------"
             if {![${:pkgdbObj} is_installed $pkgName]} {
-                puts "Package '$pkgName' is not installed."
+                :cputs_multi [list green "Package " yellow "$pkgName" green " is not installed."]
                 return
             }
             set inst [::tpm::installer new -pkgdbObj ${:pkgdbObj}] 

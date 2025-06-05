@@ -57,14 +57,23 @@ namespace eval tpm {
         }
 
         :public method is_installed {pkg} {
-            return [dict exists ${:installed_pkgs} $pkg]
+            foreach pkgDict ${:installed_pkgs} {
+                if {[dict get $pkgDict name] eq $pkg} {
+                    return 1
+                }
+            }
+            return 0
         }
 
-        :public method get_version {pkg} {
-            if {[dict exists ${:installed_pkgs} $pkg]} {
-                return [dict get [dict get ${:installed_pkgs} $pkg] version]
+        :public method get_installed_packages_by_name {pkg} {
+            set result {}
+            # puts "Searching for installed packages named '$pkg'... ${:installed_pkgs}"
+            foreach pkgDict ${:installed_pkgs} {
+                if {[dict get $pkgDict name] eq $pkg} {
+                    lappend result $pkgDict
+                }
             }
-            return ""
+            return $result
         }
 
         :public method get_install_info {pkgName} {

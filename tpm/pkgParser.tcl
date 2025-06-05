@@ -113,14 +113,14 @@ namespace eval tpm {
             if {[llength ${:pkgs}] == 0} {
                 return "No packages found."
             }
-            puts "Found [llength ${:pkgs}] packages:"
-            foreach pkg ${:pkgs} {
-                set name [dict get $pkg name]
-                set version [dict get $pkg version]
-                set path [dict get $pkg path]
-                set type [dict get $pkg type]
-                puts " - Name: $name, Version: $version, Path: $path, Type: $type"
-            }
+            # puts "Found [llength ${:pkgs}] packages:"
+            # foreach pkg ${:pkgs} {
+            #     set name [dict get $pkg name]
+            #     set version [dict get $pkg version]
+            #     set path [dict get $pkg path]
+            #     set type [dict get $pkg type]
+            #     puts " - Name: $name, Version: $version, Path: $path, Type: $type"
+            # }
             return ${:pkgs}
         }
     }
