@@ -32,37 +32,6 @@ namespace eval tpm {
             
             set pkgParserObj [::tpm::pkgParser new -pkgDirs $::tpm::original_auto_path]
             set :installed_pkgs [$pkgParserObj get_packages]
-
-            # foreach path $::tpm::original_auto_path {
-            #     puts "Scanning for installed packages in: $path"
-            #     set norm_path [file normalize $path]
-            #     if {![file isdirectory $norm_path]} continue
-
-            #     # 1. pkgIndex.tcl-style detection
-            #     set pkgFiles [glob -nocomplain -type f -directory $norm_path */pkgIndex.tcl]
-            #     puts "Found pkgIndex.tcl files: $pkgFiles"
-            #     # foreach indexfile $pkgFiles {
-            #     #     set f [open $indexfile r]
-            #     #     while {[gets $f line] >= 0} {
-            #     #         if {[regexp {package ifneeded ([^\s]+) ([^\s]+)} $line -> pkg ver]} {
-            #     #             dict set :installed_pkgs $pkg [dict create version $ver path [file dirname $indexfile]]
-            #     #         }
-            #     #     }
-            #     #     close $f
-            #     # }
-            #     # foreach tmfile [fileutil::find $norm_path :is_tm_file] {
-            #     #     set f [open $tmfile r]
-            #     #     set contents [read $f]
-            #     #     close $f
-
-            #     #     # Extract all "package provide <name> <version>" lines
-            #     #     foreach {line} [split $contents "\n"] {
-            #     #         if {[regexp {package provide\s+([^\s]+)\s+([^\s]+)} $line -> pkg ver]} {
-            #     #             dict set :installed_pkgs $pkg [dict create version $ver path [file dirname $tmfile]]
-            #     #         }
-            #     #     }
-            #     # }
-            # }
         }
 
         # Custom filter: only include files ending in .tm
@@ -79,6 +48,8 @@ namespace eval tpm {
                         cyan " - " \
                         yellow [format "%-20s" [dict get $pkgDict name]] \
                         green  [format "%-8s" [dict get $pkgDict version]] \
+                        cyan  [format "%-40s" [dict get $pkgDict path]] \
+                        magenta [format "%-9s" [dict get $pkgDict type]] \
                     ]
                     :cputs_multi $line
                 }

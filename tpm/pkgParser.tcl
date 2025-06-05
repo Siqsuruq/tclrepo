@@ -11,34 +11,55 @@ namespace eval tpm {
             :get_packages
         }
 
+        # findFiles
+        # basedir - the directory to start looking in
+        # pattern - A pattern, as defined by the glob command, that the files must match
+        :public method findFiles { basedir pattern } {
+
+            # Fix the directory name, this ensures the directory name is in the
+            # native format for the platform and contains a final directory seperator
+            set basedir [string trimright [file join [file normalize $basedir] { }]]
+            set fileList {}
+
+            # Look in the current directory for matching files, -type {f r}
+            # means ony readable normal files are looked at, -nocomplain stops
+            # an error being thrown if the returned list is empty
+            foreach fileName [glob -nocomplain -type {f r} -path $basedir $pattern] {
+                lappend fileList $fileName
+            }
+
+            # Now look for any sub direcories in the current directory
+            foreach dirName [glob -nocomplain -type {d  r} -path $basedir *] {
+                # Recusively call the method on the sub directory and append any new files to the results
+                set subDirList [:findFiles $dirName $pattern]
+                if { [llength $subDirList] > 0 } {
+                    foreach subDirFile $subDirList {
+                        lappend fileList $subDirFile
+                    }
+                }
+            }
+            return $fileList
+        }
+
         :public method parse_package_files {} {
             set pkgFiles {}
             foreach dir ${:pkgDirs} {
                 if {![file isdirectory $dir]} {
                     continue
                 }
-                set norm_dir [file normalize $dir]
-                puts "Scanning for installed packages in: $norm_dir"
-                set files [glob -nocomplain -type f -directory $norm_dir */pkgIndex.tcl]
-                lappend pkgFiles {*}$files
-
-                foreach tmfile [fileutil::find $norm_dir :is_tm_file] {
-                    puts "Found TM File: $tmfile"
-                    set f [open $tmfile r]
-                    set contents [read $f]
-                    close $f
-
-                    # Extract all "package provide <name> <version>" lines
-                    foreach {line} [split $contents "\n"] {
-                        if {[regexp {package provide\s+([^\s]+)\s+([^\s]+)} $line -> pkg ver]} {
-                            dict set :installed_pkgs $pkg [dict create version $ver path [file dirname $tmfile]]
-                        }
-                    }
-                }
+                # Collect pkgIndex.tcl files
+                set indexFiles [:findFiles $dir "pkgIndex.tcl"]
+                # Collect .tm files
+                set tmFiles [:findFiles $dir "*.tm"]
+                lappend pkgFiles {*}$indexFiles 
+                lappend pkgFiles {*}$tmFiles
             }
-            foreach pkgIndex $pkgFiles {
-                puts "Parsing pkgIndex file: $pkgIndex"
-                :parse_pkgIndex $pkgIndex
+            foreach pkgFile $pkgFiles {
+                if {[file tail $pkgFile] eq "pkgIndex.tcl"} {
+                    :parse_pkgIndex $pkgFile
+                } elseif {[string match *.tm $pkgFile]} {
+                    :parse_tm $pkgFile
+                }
             }
         }
 
@@ -54,12 +75,33 @@ namespace eval tpm {
                         dict set pkgDict type "pkgIndex"
                     }
                 }
-                puts "Found package: $pkg (version: $ver) in $indexfile"
                 lappend :pkgs $pkgDict
             } on error {errMsg} {
                 return -code error "Error parsing pkgIndex file '$indexfile': $errMsg"
             } finally {
                 close $f
+            }
+        }
+
+        :public method parse_tm {tmfile} {
+            set filename [file tail $tmfile]
+
+            # Match against official Tcl Module filename pattern
+            if {[regexp {^([[:alpha:]_][[:alnum:]_]*)-([0-9][[:alnum:].]*)\.tm$} $filename -> pkg ver]} {
+                # Confirm version is valid using package vcompare
+                if {[catch {package vcompare $ver 0}]} {
+                    return -code error "Invalid version '$ver' in tm file '$filename'"
+                }
+
+                set pkgDict [dict create \
+                    name $pkg \
+                    version $ver \
+                    path [file dirname $tmfile] \
+                    type "tm"]
+
+                lappend :pkgs $pkgDict
+            } else {
+                return -code error "Invalid .tm filename format: $filename"
             }
         }
 
