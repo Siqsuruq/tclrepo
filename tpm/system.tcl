@@ -8,7 +8,7 @@ namespace eval tpm {
 
         :public method get_install_path {} {
             # Use saved pre-libs auto_path
-            foreach path $::tpm::original_auto_path {
+            foreach path $::tpm::libsdirs {
                 if {[file writable $path]} {
                     return $path
                 }

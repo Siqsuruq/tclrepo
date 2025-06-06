@@ -30,7 +30,7 @@ namespace eval tpm {
             set :installed_pkgs {} ;# reset
             set base_dir [file normalize [file dirname [info script]]]
             
-            set pkgParserObj [::tpm::pkgParser new -pkgDirs $::tpm::original_auto_path]
+            set pkgParserObj [::tpm::pkgParser new -pkgDirs $::tpm::libsdirs]
             set :installed_pkgs [$pkgParserObj get_packages]
         }
 

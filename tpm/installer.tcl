@@ -18,7 +18,7 @@ namespace eval tpm {
             set uuid [dict get $pkg uuid_pkg_version]
             set download_url "$base/download/package/$uuid"
 
-            puts "Downloading from: $download_url"
+            :cputs_multi [list green "Downloading from: " blue "$download_url"]
             set temp_file [file tempfile tmpfile "tpm_pkg_XXXXXX.zip"]
             # close $tmpfile
 
@@ -37,8 +37,7 @@ namespace eval tpm {
             }
 
             set install_dir [[::tpm::system new] get_install_path]
-            puts "Installing to: $install_dir"
-
+            :cputs_multi [list green "Installing to: " blue "$install_dir"]
             if {[catch {
                 # exec unzip -o $temp_file -d $install_dir
                 :extract_zip_to $temp_file $install_dir
@@ -49,7 +48,7 @@ namespace eval tpm {
             }
 
             file delete -force $temp_file
-            :cputs_multi [list green "Package " yellow "$pkgName" green "installed successfully."]
+            :cputs_multi [list green "Package " yellow "$pkgName"  green " version " blue "[dict get $pkg version]" green " installed successfully."]
             ${:pkgdbObj} refresh
         }
 
@@ -85,16 +84,15 @@ namespace eval tpm {
                         :cputs_multi [list red_bold "Failed to delete package " yellow "$pkgName" red_bold " : " red "$errMsg"]
                     }
                 } elseif {[string match pkgIndex.tcl [file tail $indx]] == 1} {
-                    puts "asdasd"
                     try {
                         file delete -force -- [dict get $pkg path]
                     } on error {errMsg} {
                         :cputs_multi [list red_bold "Failed to delete package " yellow "$pkgName" red_bold " : " red "$errMsg"]
                     }
                 }
-                puts "Removing package from: $indx"
+                :cputs_multi [list green "Removing package from: " blue "$indx"]
                 ${:pkgdbObj} refresh
-                :cputs_multi [list green "Package " yellow "$pkgName" green "uninstalled successfully."]
+                :cputs_multi [list green "Package " yellow "$pkgName" green " uninstalled successfully."]
             }
         }
     }
