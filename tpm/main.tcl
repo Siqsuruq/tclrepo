@@ -6,7 +6,7 @@ set auto_path [linsert $auto_path 0 [file join $here libs]]
 
 package require nx
 package require http
-package require tls 2.0b1
+package require tls
 package require json
 package require zipfile::decode
 package require fileutil
