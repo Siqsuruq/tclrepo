@@ -72,6 +72,7 @@ namespace eval tpm {
                         dict set pkgDict name $pkg
                         dict set pkgDict version $ver
                         dict set pkgDict path [file dirname $indexfile]
+                        dict set pkgDict indx $indexfile
                         dict set pkgDict type "pkgIndex"
                     }
                 }
@@ -97,6 +98,7 @@ namespace eval tpm {
                     name $pkg \
                     version $ver \
                     path [file dirname $tmfile] \
+                    indx $tmfile \
                     type "tm"]
 
                 lappend :pkgs $pkgDict

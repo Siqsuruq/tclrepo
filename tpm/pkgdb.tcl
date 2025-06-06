@@ -34,11 +34,6 @@ namespace eval tpm {
             set :installed_pkgs [$pkgParserObj get_packages]
         }
 
-        # Custom filter: only include files ending in .tm
-        :method is_tm_file {file} {
-            return [string match *.tm [file tail $file]]
-        }
-
         :public method list_installed {} {
             if {[llength ${:installed_pkgs}] == 0} {
                 puts " (none found)"
@@ -74,13 +69,6 @@ namespace eval tpm {
                 }
             }
             return $result
-        }
-
-        :public method get_install_info {pkgName} {
-            if {![dict exists ${:installed_pkgs} $pkgName]} {
-            return ""
-        }
-            return [dict get ${:installed_pkgs} $pkgName]
         }
     }
 }
