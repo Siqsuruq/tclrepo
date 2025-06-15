@@ -41,10 +41,10 @@ namespace eval tpm {
                 foreach pkgDict ${:installed_pkgs} {
                     set line [list \
                         cyan " - " \
-                        yellow [format "%-20s" [dict get $pkgDict name]] \
-                        green  [format "%-8s" [dict get $pkgDict version]] \
-                        cyan  [format "%-40s" [dict get $pkgDict path]] \
-                        magenta [format "%-9s" [dict get $pkgDict type]] \
+                        yellow [format "%-20s" [dict getnull $pkgDict name]] \
+                        green  [format "%-8s" [dict getnull $pkgDict version]] \
+                        cyan  [format "%-40s" [dict getnull $pkgDict path]] \
+                        magenta [format "%-9s" [dict getnull $pkgDict type]] \
                     ]
                     :cputs_multi $line
                 }
@@ -53,7 +53,7 @@ namespace eval tpm {
 
         :public method is_installed {pkg} {
             foreach pkgDict ${:installed_pkgs} {
-                if {[dict get $pkgDict name] eq $pkg} {
+                if {[dict getnull $pkgDict name] eq $pkg} {
                     return 1
                 }
             }
@@ -64,7 +64,7 @@ namespace eval tpm {
             set result {}
             # puts "Searching for installed packages named '$pkg'... ${:installed_pkgs}"
             foreach pkgDict ${:installed_pkgs} {
-                if {[dict get $pkgDict name] eq $pkg} {
+                if {[dict getnull $pkgDict name] eq $pkg} {
                     lappend result $pkgDict
                 }
             }

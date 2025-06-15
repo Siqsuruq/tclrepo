@@ -49,6 +49,10 @@ namespace eval tpm {
                 }
                 # Collect pkgIndex.tcl files
                 set indexFiles [:findFiles $dir "pkgIndex.tcl"]
+                puts "-----------------------------------------------------"
+                puts "Parsing package directory: $dir"
+                puts "Found [llength $indexFiles] pkgIndex.tcl files in $dir"
+                puts "-----------------------------------------------------"
                 # Collect .tm files
                 set tmFiles [:findFiles $dir "*.tm"]
                 lappend pkgFiles {*}$indexFiles 
@@ -65,18 +69,34 @@ namespace eval tpm {
 
         :public method parse_pkgIndex {indexfile} {
             set f [open $indexfile r]
-            set pkgDict [dict create]
             try {
                 while {[gets $f line] >= 0} {
                     if {[regexp {package ifneeded ([^\s]+) ([^\s]+)} $line -> pkg ver]} {
-                        dict set pkgDict name $pkg
-                        dict set pkgDict version $ver
-                        dict set pkgDict path [file dirname $indexfile]
-                        dict set pkgDict indx $indexfile
-                        dict set pkgDict type "pkgIndex"
+                        set pkgDict [dict create \
+                            name $pkg \
+                            version $ver \
+                            path [file dirname $indexfile] \
+                            indx $indexfile \
+                            type "pkgIndex"]
+
+                        # Check if this package already exists in :pkgs
+                        set duplicate 0
+                        foreach existing ${:pkgs} {
+                            if {
+                                [dict get $existing name] eq $pkg &&
+                                [dict get $existing version] eq $ver &&
+                                [dict get $existing path] eq [dict get $pkgDict path]
+                            } then {
+                                set duplicate 1
+                                break
+                            }
+                        }
+
+                        if {!$duplicate} {
+                            lappend :pkgs $pkgDict
+                        }
                     }
                 }
-                lappend :pkgs $pkgDict
             } on error {errMsg} {
                 return -code error "Error parsing pkgIndex file '$indexfile': $errMsg"
             } finally {
