@@ -165,5 +165,10 @@ JOIN platform pl ON pv.uuid_platform = pl.uuid_platform
 JOIN license lic ON pv.uuid_license = lic.uuid_license
 LEFT JOIN package_metadata pm ON pm.uuid_pkg_version = pv.uuid_pkg_version;
 
+CREATE OR REPLACE VIEW public.stats_user_counts AS
+SELECT
+    (SELECT COUNT(*) FROM users) AS total_registered_users,
+    (SELECT COUNT(*) FROM packager WHERE approved = TRUE) AS approved_maintainers,
+    (SELECT COUNT(*) FROM packager WHERE approved = FALSE) AS pending_maintainer_requests;
 
 COMMIT;
