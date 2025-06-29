@@ -249,3 +249,17 @@ ON "package_dependency" USING btree("uuid_package_metadata");
 -- CREATE INDEX "idx_package_dependency_dependency_type"
 CREATE INDEX "idx_package_dependency_dependency_type" 
 ON "package_dependency" USING btree("dependency_type");
+
+
+CREATE TABLE public.pkg_download (
+    id BIGSERIAL PRIMARY KEY,
+    uuid_pkg_version UUID NOT NULL,
+    downloaded_at TIMESTAMPTZ DEFAULT now() NOT NULL,
+    ip_address INET, -- Optional, for analytics
+    user_agent TEXT, -- Optional
+    uuid_user UUID, -- Optional, if you track users
+    CONSTRAINT fk_pkg_version
+        FOREIGN KEY (uuid_pkg_version)
+        REFERENCES public.pkg_version (uuid_pkg_version)
+        ON DELETE CASCADE
+);

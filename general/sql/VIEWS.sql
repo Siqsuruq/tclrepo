@@ -171,4 +171,46 @@ SELECT
     (SELECT COUNT(*) FROM packager WHERE approved = TRUE) AS approved_maintainers,
     (SELECT COUNT(*) FROM packager WHERE approved = FALSE) AS pending_maintainer_requests;
 
+CREATE OR REPLACE VIEW public.stats_pkg_download_count AS
+SELECT
+    pkg_version.uuid_pkg_version,
+    package.name AS package_name,
+    pkg_version.version AS VERSION,
+    platform.name AS platform,
+    COUNT(pkg_download.id) AS download_count
+FROM
+    public.pkg_version
+JOIN
+    public.package ON package.uuid_package = pkg_version.uuid_package
+JOIN
+    public.platform ON platform.uuid_platform = pkg_version.uuid_platform
+LEFT JOIN
+    public.pkg_download ON pkg_download.uuid_pkg_version = pkg_version.uuid_pkg_version
+GROUP BY
+    pkg_version.uuid_pkg_version,
+    package.name,
+    pkg_version.version,
+    platform.name;
+
+CREATE OR REPLACE VIEW public.stats_top10_downloads AS
+SELECT
+    p.name AS package_name,
+    v.version,
+    pl.name AS platform,
+    COUNT(d.id) AS download_count
+FROM
+    pkg_download d
+JOIN
+    pkg_version v ON v.uuid_pkg_version = d.uuid_pkg_version
+JOIN
+    package p ON p.uuid_package = v.uuid_package
+JOIN
+    platform pl ON pl.uuid_platform = v.uuid_platform
+GROUP BY
+    p.name, v.version, pl.name
+ORDER BY
+    download_count DESC
+LIMIT 10;
+
+
 COMMIT;
