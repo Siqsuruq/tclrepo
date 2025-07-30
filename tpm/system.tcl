@@ -20,6 +20,7 @@ namespace eval tpm {
         }
 
         :public method print_summary {} {
+            :cputs_multi [list green "Tcl Version: " blue "$::tcl_version"]
             :cputs_multi [list green "Tcl executable path: " blue "[info nameofexecutable]"]
             :cputs_multi [list green "Tcl library path: " blue "$::tcl_library"]
             :cputs_multi [list green "Tcl executable path: " blue "[info nameofexecutable]"]
@@ -34,6 +35,16 @@ namespace eval tpm {
 
             set base [file dirname [file normalize [info script]]]
             :cputs_multi [list green "Config path: " blue "[file join $base var config]"]
+        }
+
+        :public method get_tcl_version_major {args} {
+            set major [lindex [split $::tcl_version "."] 0]
+            return $major
+        }
+
+        :public method get_tcl_version_minor {args} {
+            set minor [lindex [split $::tcl_version "."] 1]
+            return $minor
         }
     }
 }
