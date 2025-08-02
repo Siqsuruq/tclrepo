@@ -100,6 +100,7 @@ CREATE TABLE "packager" (
 	"extra" "hstore" DEFAULT ''::hstore NOT NULL,
 	"approved" Boolean DEFAULT 'false' NOT NULL,
 	"uuid_user" UUid NOT NULL UNIQUE,
+	"core_member" Boolean DEFAULT 'false' NOT NULL,
 	PRIMARY KEY ( "id" ) );
  ;
 -- -------------------------------------------------------------
