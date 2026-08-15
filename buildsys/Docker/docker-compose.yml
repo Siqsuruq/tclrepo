@@ -11,6 +11,8 @@ services:
     working_dir: /workspace
     environment:
       - DEBIAN_FRONTEND=noninteractive
+      - LC_ALL=C.UTF-8
+      - LANG=C.UTF-8
     command: >
       bash -c "
       apt-get update && 
