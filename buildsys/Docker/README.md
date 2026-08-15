@@ -35,7 +35,7 @@ and then build or rebuild --complete (first run) or --update (subsequent runs)
 
 ```bash
 cd Bawt-3.3.0
-./tclkit-Linux64-intel Bawt.tcl --tclversion 9.0.4 --architecture x64 --compiler gcc --complete Setup/MyLibs.bawt all
+./tclkit-Linux64-intel Bawt.tcl --tclversion 9.0.4 --architecture x64 --compiler gcc --numjobs $(nproc) --noonline --complete Setup/MyLibs.bawt all
 ```
 
 
