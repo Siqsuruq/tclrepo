@@ -19,6 +19,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libx11-dev \
     libxft-dev \
     libcups2-dev \
+	libjpeg-dev \
+	libpng-dev \
+	libtiff-dev \
+	libssl-dev \
     && locale-gen en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
 

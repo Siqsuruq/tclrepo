@@ -1,0 +1,21 @@
+# Custom Setup file: only the packages daidze.org actually needs.
+
+# Setup LibName   ZipFile                     BuildFile      BuildOptions
+Setup   Tcl        Tcl-[GetTclVersion].7z     Tcl.bawt
+Setup   TclStubs   Tcl-[GetTclVersion].7z     TclStubs.bawt
+Setup   Tk         Tk-[GetTkVersion].7z       Tk.bawt
+Setup   TkStubs    Tk-[GetTkVersion].7z       TkStubs.bawt
+Setup   critcl     critcl-3.3.7z              critcl.bawt
+Setup   tcllib     tcllib-2.1.7z              tcllib.bawt
+Setup   nsf        nsf-2.4.0.7z               nsf.bawt
+Setup   expect     expect-6.0a1.7z            expect.bawt
+Setup   Img        Img-[GetImgVersion].7z     Img.bawt
+Setup   mqtt       mqtt-4.0.7z                mqtt.bawt
+Setup   pdf4tcl    pdf4tcl-0.9.4.7z           pdf4tcl.bawt
+Setup   tdom       tdom-0.9.6.7z              tdom.bawt
+
+if { [GetTlsVersion] == 1 } {
+    Setup   tcltls    tcltls-1.7.23.7z        tcltls.bawt
+} else {
+    Setup   tcltls    tcltls-2.0.1.7z         tcltls.bawt    NoSunOS-solaris
+}
