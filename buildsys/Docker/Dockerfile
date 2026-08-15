@@ -14,7 +14,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     make \
     gcc \
     g++ \
+    locales \
+    zlib1g-dev \
+    libx11-dev \
+    libxft-dev \
+    libcups2-dev \
+    && locale-gen en_US.UTF-8 \
     && rm -rf /var/lib/apt/lists/*
+
+ENV LANG=en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
 
 # Step 4: Configure the workspace inside the container
 WORKDIR /workspace
