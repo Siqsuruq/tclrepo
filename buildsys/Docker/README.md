@@ -25,11 +25,19 @@ docker compose exec ubuntu-builder bash
 
 ## 4. Run BAWT
 
+Preview
+
+```bash
+cd Bawt-3.3.0
+./tclkit-Linux64-intel Bawt.tcl Setup/MyLibs.bawt --list --nosetupwarning
+```
+and then build or rebuild --complete (first run) or --update (subsequent runs)
+
 ```bash
 cd Bawt-3.3.0
 ./tclkit-Linux64-intel Bawt.tcl --tclversion 9.0.4 --architecture x64 --compiler gcc --complete Setup/MyLibs.bawt all
 ```
---complete (first run) or --update (subsequent runs)
+
 
 Output is written to `BawtBuild/Linux/x64/`.
 
