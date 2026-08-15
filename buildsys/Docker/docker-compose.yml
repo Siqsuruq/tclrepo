@@ -1,8 +1,8 @@
-version: '3.8'
-
 services:
   ubuntu-builder:
-    image: ubuntu:20.04
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: bawt_glibc231_builder
     tty: true
     stdin_open: true
@@ -10,12 +10,5 @@ services:
       - /opt/bawt:/workspace
     working_dir: /workspace
     environment:
-      - DEBIAN_FRONTEND=noninteractive
       - LC_ALL=C.UTF-8
       - LANG=C.UTF-8
-    command: >
-      bash -c "
-      apt-get update && 
-      apt-get install -y --no-install-recommends ca-certificates curl build-essential p7zip-full &&
-      echo '=== Ubuntu 20.04 Builder Ready ===' &&
-      bash"
