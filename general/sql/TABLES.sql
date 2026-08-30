@@ -264,3 +264,17 @@ CREATE TABLE public.pkg_download (
         REFERENCES public.pkg_version (uuid_pkg_version)
         ON DELETE CASCADE
 );
+
+CREATE TABLE public.pkg_tcl_compatibility (
+    id BIGSERIAL PRIMARY KEY,
+    uuid_pkg_tcl_compatibility UUID DEFAULT gen_random_uuid() NOT NULL UNIQUE,
+    uuid_pkg_version UUID NOT NULL REFERENCES public.pkg_version(uuid_pkg_version) ON DELETE CASCADE,
+    tcl_major INTEGER NOT NULL,
+    tcl_minor_min INTEGER DEFAULT 0 NOT NULL,
+    status TEXT DEFAULT 'compatible' NOT NULL CHECK ( status IN ( 'compatible', 'partial', 'incompatible' ) ),
+    notes TEXT,
+    extra HSTORE DEFAULT ''::hstore NOT NULL,
+    UNIQUE ( uuid_pkg_version, tcl_major )
+);
+CREATE INDEX idx_pkg_tcl_compatibility_pkg_version ON public.pkg_tcl_compatibility(uuid_pkg_version);
+CREATE INDEX idx_pkg_tcl_compatibility_runtime ON public.pkg_tcl_compatibility( tcl_major, tcl_minor_min, status);

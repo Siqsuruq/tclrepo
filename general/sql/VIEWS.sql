@@ -213,4 +213,25 @@ ORDER BY
 LIMIT 10;
 
 
+CREATE OR REPLACE VIEW public.v_pkg_tcl_compatibility AS SELECT
+    tc.id,
+    tc.uuid_pkg_tcl_compatibility,
+    -- Package
+    p.uuid_package,
+    p.name AS package_name,
+    -- Package version
+    pv.uuid_pkg_version,
+    pv.version AS package_version,
+    -- Tcl compatibility
+    tc.tcl_major,
+    tc.tcl_minor_min,
+    tc.tcl_major::TEXT || '.' || tc.tcl_minor_min::TEXT AS tcl_version_min,
+    tc.status,
+    tc.notes,
+    tc.extra
+FROM public.pkg_tcl_compatibility tc
+JOIN public.pkg_version pv ON pv.uuid_pkg_version = tc.uuid_pkg_version
+JOIN public.package p ON p.uuid_package = pv.uuid_package;
+
+
 COMMIT;
