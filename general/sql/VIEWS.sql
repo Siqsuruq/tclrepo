@@ -60,29 +60,64 @@ CREATE OR REPLACE VIEW "public"."v_latest_package_versions" AS  SELECT iv_packag
   WHERE (iv_package_versions_with_rn.rn = 1);;
 -- -------------------------------------------------------------
 
-CREATE OR REPLACE VIEW "public"."v_download" AS
-SELECT 
-    v_latest_package_versions.id,
-    v_latest_package_versions.uuid_pkg_version,
-    v_latest_package_versions.uuid_package,
-    v_latest_package_versions.uuid_platform,
-    v_latest_package_versions.version,
-    v_latest_package_versions.uploaded_timestamp,
-    v_latest_package_versions.path,
-    v_latest_package_versions.extra,
-    v_latest_package_versions.platform_name,
-    v_latest_package_versions.package_name,
-    v_latest_package_versions.package_description,
-	v_latest_package_versions.pkg_version_description,
-    v_latest_package_versions.package_category,
-    v_latest_package_versions.rn,
-    concat('<a href="', dz_conf.val, '/api/v2/download/package/', v_latest_package_versions.uuid_pkg_version, '"><i class="bi bi-cloud-download"></i></a>') AS download,
-    concat('<a href="#" class="info-link" data-bs-toggle="modal" data-bs-target="#metadataModal" data-package-id="', v_latest_package_versions.uuid_pkg_version, '"><i class="bi bi-info-square"></i></a>') AS info
-FROM 
-    v_latest_package_versions,
-    dz_conf
-WHERE 
-    dz_conf.var = 'domain_name'::text;
+CREATE OR REPLACE VIEW public.v_download AS SELECT
+    vp.id,
+    vp.uuid_pkg_version,
+    vp.uuid_package,
+    vp.uuid_platform,
+    vp.version,
+    vp.uploaded_timestamp,
+    vp.path,
+    vp.extra,
+    vp.platform_name,
+    vp.package_name,
+    vp.package_description,
+    vp.pkg_version_description,
+    vp.package_category,
+    vp.rn,
+
+    -- Tcl compatibility for UI
+    tc.tcl_compatibility,
+
+    concat(
+        '<a href="',
+        dz_conf.val,
+        '/api/v2/download/package/',
+        vp.uuid_pkg_version,
+        '"><i class="bi bi-cloud-download"></i></a>'
+    ) AS download,
+
+    concat(
+        '<a href="#" class="info-link" ',
+        'data-bs-toggle="modal" ',
+        'data-bs-target="#metadataModal" ',
+        'data-package-id="',
+        vp.uuid_pkg_version,
+        '"><i class="bi bi-info-square"></i></a>'
+    ) AS info
+
+FROM public.v_latest_package_versions vp
+
+LEFT JOIN LATERAL (
+    SELECT string_agg(
+        concat(
+            'Tcl ',
+            c.tcl_major,
+            '.',
+            c.tcl_minor_min,
+            '+'
+        ),
+        ', '
+        ORDER BY c.tcl_major, c.tcl_minor_min
+    ) AS tcl_compatibility
+    FROM public.pkg_tcl_compatibility c
+    WHERE c.uuid_pkg_version = vp.uuid_pkg_version
+      AND c.status = 'compatible'
+) tc ON TRUE
+
+CROSS JOIN public.dz_conf
+
+WHERE dz_conf.var = 'domain_name';
 
 
 -- CREATE VIEW "stats_package_counts" --------------------------
