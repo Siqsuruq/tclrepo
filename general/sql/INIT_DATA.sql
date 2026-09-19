@@ -1,15 +1,14 @@
 INSERT INTO "platform" ("uuid_platform", "name", "description") VALUES
 ( 'd1a5ad90-2534-471f-9a7f-b9eae64f0e7e', 'Tcl', 'Packages that work with the Tcl scripting language, regardless of platform.' ),
-( '9bb9da21-a628-4cca-8e94-5ab9317b6747', 'Tk', 'Requires the Tk toolkit for graphical user interfaces (GUI) alongside Tcl.' ),
-( '99810a9b-2759-4bb5-a6d0-7b4f04b2668c', 'Linux32', 'Packages compatible only with 32-bit Linux operating systems.' ),
-( '3c1e96e2-f130-4d5c-b206-63623007ca58', 'Linux64', 'Packages compatible only with 64-bit Linux operating systems.' ),
-( '13df1bad-20e6-4891-ac94-aad937c80bd1', 'Win32', 'Packages compatible only with 32-bit Windows operating systems.' ),
-( '9c8237da-68ea-46c2-971f-2c59ce888329', 'Win64', 'Packages compatible only with 64-bit Windows operating systems.' ),
+( '99810a9b-2759-4bb5-a6d0-7b4f04b2668c', 'linux-ix86', 'Packages compatible only with 32-bit Linux operating systems.' ),
+( '3c1e96e2-f130-4d5c-b206-63623007ca58', 'linux-x86_64', 'Packages compatible only with 64-bit Linux operating systems.' ),
+( '13df1bad-20e6-4891-ac94-aad937c80bd1', 'win32-ix86', 'Packages compatible only with 32-bit Windows operating systems.' ),
+( '9c8237da-68ea-46c2-971f-2c59ce888329', 'win32-x86_64', 'Packages compatible only with 64-bit Windows operating systems.' ),
 ( '255506df-6f5f-416b-be9f-9f2315db4eae', 'Mac', 'Packages compatible only with macOS desktop and laptop systems.' ),
 ( '5eadbc58-e23a-4e33-96ce-b1b20aded4a4', 'AIX', 'Packages compatible only with IBM AIX, a UNIX operating system commonly used in enterprise environments.' ),
-( 'c1a632bb-5425-45a8-8254-4dfd0f88e712', 'Solaris', 'Packages compatible only with Solaris, an operating system from Oracle, often used on SPARC systems.' ),
-( 'e57c7ff7-6e48-4b78-9624-65deacb41fd3', 'BSD', 'Packages compatible with BSD-based operating systems such as FreeBSD, OpenBSD, and NetBSD.' ),
-( '5bc52275-33bf-4a9a-a8cb-d6af25deaf63', 'Android', 'Packages that can be used only on Android devices, typically requiring mobile-friendly dependencies.' ),
+( 'c1a632bb-5425-45a8-8254-4dfd0f88e712', 'solaris-x86_64', 'Packages compatible only with Solaris, an operating system from Oracle, often used on SPARC systems.' ),
+( 'e57c7ff7-6e48-4b78-9624-65deacb41fd3', 'freebsd-amd64', 'Packages compatible with BSD-based operating systems such as FreeBSD, OpenBSD, and NetBSD.' ),
+( '5bc52275-33bf-4a9a-a8cb-d6af25deaf63', 'linux-aarch64', 'Packages that can be used only on Android devices, typically requiring mobile-friendly dependencies.' ),
 ( '0e0e72cf-cab6-41db-a982-b72dc101bd83', 'ARM', 'Packages designed only for ARM architecture, commonly used in devices like Raspberry Pi and embedded systems.' ),
 ( '4dcee4bd-f48f-4fdd-9f83-711b63b019ef', 'iOS', 'Packages compatible only with Apple iOS mobile devices such as iPhones and iPads.' );
 
